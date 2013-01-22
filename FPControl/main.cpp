@@ -3,13 +3,18 @@
 #include <stdlib.h>
 #include <GL/glut.h>
 #include <windows.h>
+#include <vector>
 
 using namespace std;
 
 GLfloat boxsize = 2;
 bool rotating = false;
-GLfloat degrees = 1;
+GLfloat degrees = 0;
 GLfloat position = 0;
+GLfloat positionx;
+GLfloat positionz;
+GLfloat dirx;
+GLfloat dirz;
 
 void handleKeypress(unsigned char key, int x, int y) {
 	switch (key) {
@@ -21,9 +26,38 @@ void handleKeypress(unsigned char key, int x, int y) {
 		break;
 	case 119:
 		position += 1;
+		if(degrees >= 0)
+		{
+		std::cout<<"dirz and dirx"<<endl;
+		std::cout<<dirz<<endl;
+		std::cout<<dirx<<endl;
+		std::cout<<"\n";
+		positionx = positionx - (dirx);
+		positionz = positionz + (dirz);
+		std::cout<<"position z and x"<<endl;
+		std::cout<<positionx<<endl;
+		std::cout<<positionz<<endl;
+		std::cout<<"\n";}
+		else{
+		positionx = positionx + (dirx);
+		positionz = positionz - (dirz);
+		}
 		break;
 	case 115:
+		if(position >= 0)
+		{
+
 		position -= 1;
+		positionx = positionx + (dirx);
+		positionz = positionz - (dirz);
+		std::cout<<positionx<<endl;
+		std::cout<<positionz<<endl;
+		std::cout<<"\n";}
+		else
+		{
+			positionx = positionx -(dirx);
+			positionz = positionz + dirz;
+		}
 		break;
 	case 27: //Escape key
 			exit(0);
@@ -45,21 +79,107 @@ void handleResize(int w, int h) {
 	glLoadIdentity();
 	gluPerspective(45.0, (float)w / (float)h, 1.0, 200.0);
 }
+int prevd = 0;
+void calculate_direction(int degrees){
+	if(degrees == 0 || degrees == 180 || degrees == -180)
+	{
+		//std::cout<<"1"<<endl;
+		dirx = 0;
+		dirz = 1;
+	}
+	else if(degrees == 90 || degrees == -90)
+	{
+		dirx = 1;
+		dirz = 0;
+	}
+	else if(degrees > 0 && degrees < 90)
+	{
+		dirx = degrees/90.0;
+		dirz = 1 - dirx;
+	}
+	else if(degrees > 90 && degrees < 180)
+	{
+		dirz = degrees/180.0;
+		dirx = 1 - dirz;
+	}
+	else if(degrees >-90 && degrees <0)
+	{
+		//std::cout<<"5"<<endl;
+		dirz = degrees/-90.0;
+		dirx = 1 - dirz;
+	}
+	else if(degrees < -90 && degrees > -180)
+	{ 
+		dirz = degrees /-180.0;
+		dirx = 1-dirz;
+	}
+	if(prevd != degrees)
+	{
+		std::cout<<"New dirx"<<endl;
+		std::cout<<dirx<<endl;
+		std::cout<<"New dirz"<<endl;
+		std::cout<<dirz<<endl;
+		std::cout<<degrees<<endl;
+		std::cout<<"\n";
 
+	}
+
+}
 
 void drawScene() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	//glPushMatrix();
+
+	// Rotate the che camera towards right angle
 	glRotatef(degrees, 0, 1, 0);
-	glTranslatef(0, 0, position);
-	//glPopMatrix;
+
+	calculate_direction(degrees);
+
+	// Translate camera to right position
+	glTranslatef(positionx, 0, positionz);
+	prevd = degrees;
+
+	// THIS EXPERIMENT WORKS
+	//Experiment for placement of object depending on rotated axis
+	glPushMatrix();
+	// Rotate 90 degrees around y axis( x = z, z = x)
+	glRotatef(90, 0, 1, 0);
+	// Put the object in the distance
+	glTranslatef(0, 0, -100);
+	glBegin(GL_QUADS);
+	glColor3f(1, 1, 1);
+	glNormal3f(0, 0, 1);
+	glVertex3f(-20, -20, 20 );
+	glVertex3f( 20, -20, 20 );
+	glVertex3f( 20,  20, 20 );
+	glVertex3f(-20,  20, 20 );
+	glEnd();
+	glPopMatrix();
+
+
+
+	glPushMatrix();
+	// Rotate 90 degrees around y axis( x = z, z = x)
+	glRotatef(90, 0, 1, 0);
+	// Put the object in the distance
+	glTranslatef(0, 0, 100);
+	glBegin(GL_QUADS);
+	glColor3f(1, 1, 1);
+	glNormal3f(0, 0, 1);
+	glVertex3f(-20, -20, 20 );
+	glVertex3f( 20, -20, 20 );
+	glVertex3f( 20,  20, 20 );
+	glVertex3f(-20,  20, 20 );
+	glEnd();
+	glPopMatrix();
+
 
 
 	// glTranslatef(0, 0, -position);
 	glBegin(GL_QUADS);
+
 	// Cube around camera
 	// Front
 	glColor3f(1, 0, 0);
@@ -84,8 +204,6 @@ void drawScene() {
 	glVertex3f(-20,  20, -20 );
 	glVertex3f(-20,  20,  20 );
 	glVertex3f(-20,  -20,  20 );
-
-
 	glEnd();
 
 	glutSwapBuffers();
