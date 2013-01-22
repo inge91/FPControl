@@ -67,22 +67,37 @@ void handleResize(int w, int h) {
 }
 int prevd = 0;
 void calculate_direction(int degrees){
-	if(degrees == 0 || degrees == 180 || degrees == -180)
+
+	// Works
+	if(degrees == 0 || degrees == 180 || degrees == -180 || degrees == 360 || degrees == -360)
 	{
-		//std::cout<<"1"<<endl;
 		dirx = 0;
 		dirz = 1;
 	}
+	// Works
 	else if(degrees == 90 || degrees == -90)
 	{
-		dirx = 1;
+		dirx = degrees/90;
 		dirz = 0;
 	}
+	// Works
+	else if (degrees == 270 || degrees == -270)
+	{
+		dirx = degrees/-270;
+		dirz = 0;
+	}
+	// Works
 	else if(degrees > 0 && degrees < 90)
 	{
 		dirx = degrees/90.0;
 		dirz = 1 - dirx;
 	}
+	else if(degrees < -270 && degrees > -360)
+	{
+		dirz = degrees / -360.0;
+		dirx = 1 - dirz;
+	}
+
 	else if(degrees > 90 && degrees < 180)
 	{
 		dirz = degrees/180.0;
@@ -90,9 +105,8 @@ void calculate_direction(int degrees){
 	}
 	else if(degrees >-90 && degrees <0)
 	{
-		//std::cout<<"5"<<endl;
-		dirz = degrees/-90.0;
-		dirx = 1 - dirz;
+		dirx = -(degrees/-90.0);
+		dirz = (1 + dirx);
 	}
 	else if(degrees < -90 && degrees > -180)
 	{ 
@@ -198,6 +212,14 @@ void drawScene() {
 //Called every 25 milliseconds
 void update(int value) {
 	glutPostRedisplay();
+	if(degrees >360)
+	{
+		degrees -= 360;
+	}
+	else if(degrees < -360)
+	{
+		degrees += 360;
+	}
 	glutTimerFunc(2, update, 0);
 }
 
