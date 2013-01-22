@@ -18,32 +18,29 @@ GLfloat dirz;
 
 void handleKeypress(unsigned char key, int x, int y) {
 	switch (key) {
+	// a-key
 	case 97:
-		degrees -= 5;
+		degrees -= 2;
 		break;
+	// d-key
 	case 100:
-		degrees += 5;
+		degrees += 2;
 		break;
+	// w-key
 	case 119:
-		position += 1;
-		std::cout<<"dirz and dirx"<<endl;
-		std::cout<<dirz<<endl;
-		std::cout<<dirx<<endl;
-		std::cout<<"\n";
 		positionx = positionx - (dirx);
 		positionz = positionz + (dirz);
-		std::cout<<"position z and x"<<endl;
-		std::cout<<positionx<<endl;
-		std::cout<<positionz<<endl;
-		std::cout<<"\n";
 		break;
+	// s-key
 	case 115:
-		position -= 1;
 		positionx = positionx + (dirx);
 		positionz = positionz - (dirz);
-		std::cout<<positionx<<endl;
-		std::cout<<positionz<<endl;
-		std::cout<<"\n";
+		break;
+	// q-key
+	case 113:
+		positionz = positionx - (dirx);
+		positionx = positionz + (dirz);
+
 		break;
 	case 27: //Escape key
 			exit(0);
@@ -66,13 +63,26 @@ void handleResize(int w, int h) {
 	gluPerspective(45.0, (float)w / (float)h, 1.0, 200.0);
 }
 int prevd = 0;
-void calculate_direction(int degrees){
-
-	// Works
-	if(degrees == 0 || degrees == 180 || degrees == -180 || degrees == 360 || degrees == -360)
+void calculate_direction(){
+	// create less possibilities for degrees
+	if (degrees > 180)
 	{
+		degrees -= 360;
+
+	}
+	else if(degrees < -180)
+	{
+		degrees += 360;
+	}
+	// Works
+	if(degrees == 0 || degrees == 180)
+	{
+		if(degrees ==180)
+		{ dirz = -1;
+		}
+		else{ dirz = 1;
+		}
 		dirx = 0;
-		dirz = 1;
 	}
 	// Works
 	else if(degrees == 90 || degrees == -90)
@@ -81,28 +91,20 @@ void calculate_direction(int degrees){
 		dirz = 0;
 	}
 	// Works
-	else if (degrees == 270 || degrees == -270)
-	{
-		dirx = degrees/-270;
-		dirz = 0;
-	}
-	// Works
 	else if(degrees > 0 && degrees < 90)
 	{
 		dirx = degrees/90.0;
 		dirz = 1 - dirx;
 	}
-	else if(degrees < -270 && degrees > -360)
-	{
-		dirz = degrees / -360.0;
-		dirx = 1 - dirz;
-	}
-
+	// Works
 	else if(degrees > 90 && degrees < 180)
 	{
-		dirz = degrees/180.0;
-		dirx = 1 - dirz;
+		// Just act like degrees is between 0 and 90
+		long temp = degrees - 90;
+		dirz = -((degrees/90.0) -1);
+		dirx = 1 + dirz;
 	}
+	// Works
 	else if(degrees >-90 && degrees <0)
 	{
 		dirx = -(degrees/-90.0);
@@ -110,18 +112,12 @@ void calculate_direction(int degrees){
 	}
 	else if(degrees < -90 && degrees > -180)
 	{ 
-		dirz = degrees /-180.0;
-		dirx = 1-dirz;
+		long temp = degrees + 90;
+		dirz = -((degrees /-90.0)-1);
+		dirx = -(1 + dirz);
 	}
 	if(prevd != degrees)
 	{
-		std::cout<<"New dirx"<<endl;
-		std::cout<<dirx<<endl;
-		std::cout<<"New dirz"<<endl;
-		std::cout<<dirz<<endl;
-		std::cout<<degrees<<endl;
-		std::cout<<"\n";
-
 	}
 
 }
@@ -135,7 +131,7 @@ void drawScene() {
 	// Rotate the che camera towards right angle
 	glRotatef(degrees, 0, 1, 0);
 
-	calculate_direction(degrees);
+	calculate_direction();
 
 	// Translate camera to right position
 	glTranslatef(positionx, 0, positionz);
