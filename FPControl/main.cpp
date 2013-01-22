@@ -52,10 +52,10 @@ void drawScene() {
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-
-	glTranslatef(0, 0, position);
+	//glPushMatrix();
 	glRotatef(degrees, 0, 1, 0);
-	glTranslatef(0, 0, -position);
+	glTranslatef(0, 0, position);
+	//glPopMatrix;
 
 
 	// glTranslatef(0, 0, -position);
