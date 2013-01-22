@@ -26,8 +26,6 @@ void handleKeypress(unsigned char key, int x, int y) {
 		break;
 	case 119:
 		position += 1;
-		if(degrees >= 0)
-		{
 		std::cout<<"dirz and dirx"<<endl;
 		std::cout<<dirz<<endl;
 		std::cout<<dirx<<endl;
@@ -37,27 +35,15 @@ void handleKeypress(unsigned char key, int x, int y) {
 		std::cout<<"position z and x"<<endl;
 		std::cout<<positionx<<endl;
 		std::cout<<positionz<<endl;
-		std::cout<<"\n";}
-		else{
-		positionx = positionx + (dirx);
-		positionz = positionz - (dirz);
-		}
+		std::cout<<"\n";
 		break;
 	case 115:
-		if(position >= 0)
-		{
-
 		position -= 1;
 		positionx = positionx + (dirx);
 		positionz = positionz - (dirz);
 		std::cout<<positionx<<endl;
 		std::cout<<positionz<<endl;
-		std::cout<<"\n";}
-		else
-		{
-			positionx = positionx -(dirx);
-			positionz = positionz + dirz;
-		}
+		std::cout<<"\n";
 		break;
 	case 27: //Escape key
 			exit(0);
