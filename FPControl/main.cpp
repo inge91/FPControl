@@ -15,37 +15,102 @@ GLfloat positionx;
 GLfloat positionz;
 GLfloat dirx;
 GLfloat dirz;
+bool a = false;
+bool d = false;
+bool w = false;
+bool s = false;
+bool q = false;
+bool e = false;
 
-void handleKeypress(unsigned char key, int x, int y) {
+void key_down_func(unsigned char key, int x, int y) {
 	switch (key) {
 	// a-key
 	case 97:
+		a = true;
 		degrees -= 2;
 		break;
 	// d-key
 	case 100:
+		d  = true;
 		degrees += 2;
 		break;
 	// w-key
 	case 119:
+		w = true;
 		positionx = positionx - (dirx);
 		positionz = positionz + (dirz);
 		break;
 	// s-key
 	case 115:
+		s = true;
 		positionx = positionx + (dirx);
 		positionz = positionz - (dirz);
 		break;
 	// q-key
 	case 113:
-		positionz = positionx - (dirx);
-		positionx = positionz + (dirz);
-
+		//positionz = positionx - (dirx);
+		q = true;
+		positionx = positionx + (dirz);
+		positionz = positionz - (dirx);
+		break;
+	case 'e':
+		e = true;
+		//positionz = positionx - (dirx);
+		positionx = positionx - (dirz);
+		positionz = positionz + (dirx);
 		break;
 	case 27: //Escape key
 			exit(0);
 	}
 }
+
+void key_up_func(unsigned char key, int x, int y) {
+	switch (key) {
+	// a-key
+	case 97:
+		a = false;
+		degrees -= 2;
+		break;
+	// d-key
+	case 100:
+		d  = false;
+		degrees += 2;
+		break;
+	// w-key
+	case 119:
+		w = false;
+		positionx = positionx - (dirx);
+		positionz = positionz + (dirz);
+		break;
+	// s-key
+	case 115:
+		s = false;
+		positionx = positionx + (dirx);
+		positionz = positionz - (dirz);
+		break;
+	// q-key
+	case 113:
+		q = false;
+		//positionz = positionx - (dirx);
+		positionx = positionx + (dirz);
+		positionz = positionz - (dirx);
+		break;
+	case 'e':
+		e = false;
+		//positionz = positionx - (dirx);
+		positionx = positionx - (dirz);
+		positionz = positionz + (dirx);
+		break;
+	case 27: //Escape key
+			exit(0);
+	}
+		std::cout<<"Positionx"<<endl;
+		std::cout<<positionx<<endl;
+		std::cout<<"Positionz"<<endl;
+		std::cout<<positionz<<endl;
+		std::cout<<"\n";
+}
+
 
 void initRendering() {
 	glEnable(GL_DEPTH_TEST);
@@ -63,6 +128,12 @@ void handleResize(int w, int h) {
 	gluPerspective(45.0, (float)w / (float)h, 1.0, 200.0);
 }
 int prevd = 0;
+
+void calculate_direction_horizontal()
+{
+
+}
+
 void calculate_direction(){
 	// create less possibilities for degrees
 	if (degrees > 180)
@@ -117,7 +188,19 @@ void calculate_direction(){
 		dirx = -(1 + dirz);
 	}
 	if(prevd != degrees)
-	{
+	{ 
+		std::cout<<"Dirz"<<endl;
+		std::cout<<dirz<<endl;
+    	std::cout<<"Dirx"<<endl;
+	    std::cout<<dirx<<endl;
+		std::cout<<"Positionx"<<endl;
+		std::cout<<positionx<<endl;
+		std::cout<<"Positionz"<<endl;
+		std::cout<<positionz<<endl;
+		std::cout<<"degrees"<<endl;
+		std::cout<<degrees<<endl;
+		std::cout<<"\n";
+	   prevd = degrees;
 	}
 
 }
@@ -208,15 +291,31 @@ void drawScene() {
 //Called every 25 milliseconds
 void update(int value) {
 	glutPostRedisplay();
-	if(degrees >360)
+	if(a)
+	degrees -= 2;
+	if(d)
+		degrees += 2;
+	if(w)
 	{
-		degrees -= 360;
+		positionx = positionx - (dirx);
+		positionz = positionz + (dirz);
 	}
-	else if(degrees < -360)
+	if(s){
+		positionx = positionx + (dirx);
+		positionz = positionz - (dirz);
+	}
+	if(q)
 	{
-		degrees += 360;
+		positionx = positionx + (dirz);
+		positionz = positionz - (dirx);
+
 	}
-	glutTimerFunc(2, update, 0);
+	if(e)
+	{
+		positionx = positionx - (dirz);
+		positionz = positionz + (dirx);
+	}
+	glutTimerFunc(25, update, 0);
 }
 
 int main(int argc, char** argv) {
@@ -228,10 +327,11 @@ int main(int argc, char** argv) {
 	initRendering();
 	
 	glutDisplayFunc(drawScene);
-	glutKeyboardFunc(handleKeypress);
+	glutKeyboardFunc(key_down_func);
+	glutKeyboardUpFunc(key_up_func);
 	glutReshapeFunc(handleResize);
 	glutTimerFunc(25, update, 0);
-	
+	glutIgnoreKeyRepeat(true);
 	glutMainLoop();
 	return 0;
 }
