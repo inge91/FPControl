@@ -6,6 +6,9 @@
 #include <vector>
 
 using namespace std;
+void calculate_direction();
+void calculate_direction_horizontal();
+
 
 GLfloat boxsize = 2;
 bool rotating = false;
@@ -37,12 +40,14 @@ void key_down_func(unsigned char key, int x, int y) {
 	// w-key
 	case 119:
 		w = true;
+	calculate_direction();
 		positionx = positionx - (dirx);
 		positionz = positionz + (dirz);
 		break;
 	// s-key
 	case 115:
 		s = true;
+	calculate_direction();
 		positionx = positionx + (dirx);
 		positionz = positionz - (dirz);
 		break;
@@ -50,18 +55,22 @@ void key_down_func(unsigned char key, int x, int y) {
 	case 113:
 		//positionz = positionx - (dirx);
 		q = true;
+		calculate_direction_horizontal();
 		positionx = positionx + (dirz);
 		positionz = positionz - (dirx);
 		break;
 	case 'e':
 		e = true;
 		//positionz = positionx - (dirx);
+		calculate_direction_horizontal();
 		positionx = positionx - (dirz);
 		positionz = positionz + (dirx);
 		break;
 	case 27: //Escape key
 			exit(0);
 	}
+	std::cout<<"degrees"<<endl;
+	std::cout<<degrees<<endl;
 }
 
 void key_up_func(unsigned char key, int x, int y) {
@@ -79,18 +88,21 @@ void key_up_func(unsigned char key, int x, int y) {
 	// w-key
 	case 119:
 		w = false;
+	calculate_direction();
 		positionx = positionx - (dirx);
 		positionz = positionz + (dirz);
 		break;
 	// s-key
 	case 115:
 		s = false;
+	calculate_direction();
 		positionx = positionx + (dirx);
 		positionz = positionz - (dirz);
 		break;
 	// q-key
 	case 113:
 		q = false;
+		calculate_direction_horizontal();
 		//positionz = positionx - (dirx);
 		positionx = positionx + (dirz);
 		positionz = positionz - (dirx);
@@ -98,6 +110,7 @@ void key_up_func(unsigned char key, int x, int y) {
 	case 'e':
 		e = false;
 		//positionz = positionx - (dirx);
+		calculate_direction_horizontal();
 		positionx = positionx - (dirz);
 		positionz = positionz + (dirx);
 		break;
@@ -108,6 +121,8 @@ void key_up_func(unsigned char key, int x, int y) {
 		std::cout<<positionx<<endl;
 		std::cout<<"Positionz"<<endl;
 		std::cout<<positionz<<endl;
+	std::cout<<"degrees"<<endl;
+	std::cout<<degrees<<endl;
 		std::cout<<"\n";
 }
 
@@ -131,7 +146,79 @@ int prevd = 0;
 
 void calculate_direction_horizontal()
 {
+	// create less possibilities for degrees
+	if (degrees > 180)
+	{
+		degrees -= 360;
 
+	}
+	else if(degrees < -180)
+	{
+		degrees += 360;
+	}
+	// Works
+	if(degrees == 0 || degrees == 180)
+	{
+		if(degrees ==180)
+		{ dirz = -1;
+		}
+		else{ dirz = 1;
+		}
+		dirx = 0;
+	}
+	// Works
+	else if(degrees == 90 || degrees == -90)
+	{
+		dirx = -degrees/90;
+		dirz = 0;
+	}
+	// Works
+	else if(degrees > 0 && degrees < 90)
+	{
+		dirx = -degrees/90.0;
+		dirz = 1 + dirx;
+	}
+	// Works
+	else if(degrees > 90 && degrees < 180)
+	{
+		// Just act like degrees is between 0 and 90
+		dirz = -((degrees/90.0) -1);
+		dirx = -(1 + dirz);
+	}
+	// Works
+	else if(degrees >-90 && degrees <0)
+	{
+		dirx = (degrees/-90.0);
+		dirz = (1 - dirx);
+		std::cout<<"dirz!"<<endl;
+		std::cout<<dirz<<endl;
+		std::cout<<"\n"<<endl;
+		std::cout<<"dirx!"<<endl;
+		std::cout<<dirx<<endl;
+		std::cout<<"\n"<<endl;
+		//dirx = 0;
+	}
+	// Works
+	else if(degrees < -90 && degrees > -180)
+	{ 
+		dirz = -((degrees/-90.0) -1);
+		dirx = (1 + dirz);
+	}
+	if(false)
+	{ 
+		std::cout<<"Dirz"<<endl;
+		std::cout<<dirz<<endl;
+    	std::cout<<"Dirx"<<endl;
+	    std::cout<<dirx<<endl;
+		std::cout<<"Positionx"<<endl;
+		std::cout<<positionx<<endl;
+		std::cout<<"Positionz"<<endl;
+		std::cout<<positionz<<endl;
+		std::cout<<"degrees"<<endl;
+		std::cout<<degrees<<endl;
+		std::cout<<"\n";
+	   prevd = degrees;
+	}
 }
 
 void calculate_direction(){
@@ -187,7 +274,7 @@ void calculate_direction(){
 		dirz = -((degrees /-90.0)-1);
 		dirx = -(1 + dirz);
 	}
-	if(prevd != degrees)
+	if(false)
 	{ 
 		std::cout<<"Dirz"<<endl;
 		std::cout<<dirz<<endl;
@@ -214,7 +301,6 @@ void drawScene() {
 	// Rotate the che camera towards right angle
 	glRotatef(degrees, 0, 1, 0);
 
-	calculate_direction();
 
 	// Translate camera to right position
 	glTranslatef(positionx, 0, positionz);
@@ -292,29 +378,44 @@ void drawScene() {
 void update(int value) {
 	glutPostRedisplay();
 	if(a)
+	{
 	degrees -= 2;
+	std::cout<<"degrees"<<endl;
+	std::cout<<degrees<<endl;
+		std::cout<<"\n";
+	}
 	if(d)
+	{
 		degrees += 2;
+	std::cout<<"degrees"<<endl;
+	std::cout<<degrees<<endl;
+		std::cout<<"\n";
+	}
 	if(w)
 	{
+	calculate_direction();
 		positionx = positionx - (dirx);
 		positionz = positionz + (dirz);
 	}
 	if(s){
+	calculate_direction();
 		positionx = positionx + (dirx);
 		positionz = positionz - (dirz);
 	}
 	if(q)
 	{
+		calculate_direction_horizontal();
 		positionx = positionx + (dirz);
 		positionz = positionz - (dirx);
 
 	}
 	if(e)
 	{
+		calculate_direction_horizontal();
 		positionx = positionx - (dirz);
 		positionz = positionz + (dirx);
 	}
+
 	glutTimerFunc(25, update, 0);
 }
 
