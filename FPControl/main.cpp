@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <GL/glut.h>
 #include <windows.h>
+#include "imageloader.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <vector>
@@ -26,6 +27,8 @@ bool w = false;
 bool s = false;
 bool q = false;
 bool e = false;
+
+
 
 void key_down_func(unsigned char key, int x, int y) {
 	switch (key) {
@@ -120,6 +123,25 @@ void key_up_func(unsigned char key, int x, int y) {
 }
 
 
+
+//Makes the image into a texture, and returns the id of the texture
+GLuint loadTexture(Image* image) {
+	GLuint textureId;
+	glGenTextures(1, &textureId); //Make room for our texture
+	glBindTexture(GL_TEXTURE_2D, textureId); //Tell OpenGL which texture to edit
+	//Map the image to the texture
+	glTexImage2D(GL_TEXTURE_2D,                //Always GL_TEXTURE_2D
+				 0,                            //0 for now
+				 GL_RGB,                       //Format OpenGL uses for image
+				 image->width, image->height,  //Width and height
+				 0,                            //The border of the image
+				 GL_RGB, //GL_RGB, because pixels are stored in RGB format
+				 GL_UNSIGNED_BYTE, //GL_UNSIGNED_BYTE, because pixels are stored
+				                   //as unsigned numbers
+				 image->pixels);               //The actual pixel data
+	return textureId; //Returns the id of the texture
+
+}
 void initRendering() {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
@@ -370,11 +392,7 @@ void drawScene() {
 	glRotatef(degr, 0, 1, 0);
 
 	glColor4f(1,1,1, 0);
-	glEnable(GL_TEXTURE_2D);	//glDepthMask(GL_FALSE);
-	//glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glColor4f(1,1,1,0);
-    glBindTexture(GL_TEXTURE_2D, alien);
+	glEnable(GL_TEXTURE_2D);    glBindTexture(GL_TEXTURE_2D, t);
 	
 	glBegin(GL_QUADS);
 	glTexCoord2f(1,1);
@@ -433,15 +451,14 @@ void drawScene() {
 	glVertex3f(minx, maxy, maxz);
 
 
+	glEnable(GL_TEXTURE_2D);
 	glColor4f(1,1,1, 0);
     glBindTexture(GL_TEXTURE_2D, t);
 	glTexCoord2f(0, 0);
 	glVertex3f(minx, miny, minz);
-	glTexCoord2f(0, 40);
 	glVertex3f(maxx, miny, minz);
-	glTexCoord2f(40, 40);
 	glVertex3f(maxx, miny, maxz);
-	glTexCoord2f(40, 0);
+	glTexCoord2f(1, 1);
 	glVertex3f(minx, miny, maxz);
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
@@ -560,7 +577,10 @@ int main(int argc, char** argv) {
 	
 	// t = LoadTextureRAW("bricks3.raw", 1);
 	t = LoadTextureRAW("tile.raw", 1,90,90);
-	alien = LoadTextureRAW("alien.raw", 1,120,350);
+	Image* image = loadBMP("alien.bmp");
+	//alien = loadTexture(image);
+	alien = LoadTextureRAW("alien.bmp", 1,90,90);
+
 	glutDisplayFunc(drawScene);
 	glutKeyboardFunc(key_down_func);
 	glutKeyboardUpFunc(key_up_func);
