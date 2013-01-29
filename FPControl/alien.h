@@ -19,12 +19,13 @@ public:
 	GLfloat mposz;
 	// Rotation of the alien
 	GLfloat mdegrees;
-	void draw_alien(GLfloat camerax, GLfloat camer±az);
+	void draw_alien(GLfloat camerax, GLfloat cameraz);
 
 
 private:
+	GLfloat mspeed;
 	void calculate_degrees(GLfloat camerax, GLfloat cameraz);
-	
+	void move_alien(GLfloat camerax, GLfloat cameraz);
 
 };
 #endif

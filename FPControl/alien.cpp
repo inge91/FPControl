@@ -3,8 +3,9 @@
 
 Alien::Alien( GLfloat camerax, GLfloat cameraz)
 {
-	mposx = 30;
-	mposz = 20;
+	mposx = 0;
+	mposz = -40;
+	mspeed = 0.4;
 	// Set the degrees
 	calculate_degrees(camerax, cameraz); 
 }
@@ -22,6 +23,7 @@ void Alien::calculate_degrees( GLfloat camerax, GLfloat cameraz)
 	GLfloat rad = 0;
 	GLfloat c = sqrt(pow(relposx,2) + pow(relposz,2));
 
+	/*
 	if(prevxx != camerax || prevzz != cameraz)
 	{
 
@@ -36,7 +38,7 @@ void Alien::calculate_degrees( GLfloat camerax, GLfloat cameraz)
 	std::cout<<"\n";
 	prevxx = camerax;
 	prevzz = cameraz;
-	}
+	}*/
 	if(relposx == 0 )
 	{
 		mdegrees = 0;
@@ -73,26 +75,6 @@ void Alien::calculate_degrees( GLfloat camerax, GLfloat cameraz)
 			mdegrees = (-90 - mdegrees) -90;
 		}
 	}
-	if(prevdeg != mdegrees)
-	{std::cout<<mdegrees<<endl;
-	std::cout<<"\n";
-	prevdeg = mdegrees;
-	}
-
-	/*
-	else{
-		rad = asin(relposx/c);
-		mdegrees = (rad * 180.0)/M_PI;
-		if(relposz > 0&& relposx > 0)
-		{
-			mdegrees = (90 -mdegrees) + 90 ;
-		}
-		else if(relposx < 0 && relposz >0)
-		{
-			mdegrees = (-90 - mdegrees) -90;
-		}
-	}
-	*/
 
 }
 
@@ -117,5 +99,81 @@ void Alien::draw_alien(GLfloat camerax, GLfloat cameraz)
 	//glDisable(GL_TEXTURE_2D);
 	//glDisable(GL_BLEND);
 	//glDepthMask(GL_TRUE);
+
+	move_alien(camerax, cameraz);
+
 	glPopMatrix();
+}
+
+GLfloat prevcx = 0;
+GLfloat prevcz = 0;
+GLfloat prevvv = 0;
+void Alien::move_alien(GLfloat camerax, GLfloat cameraz)
+{
+	camerax = -camerax;
+	cameraz = -cameraz;
+	if(camerax !=prevcx || cameraz != prevcz)
+	{
+		std::cout<<"camerax"<<endl;
+		std::cout<<camerax<<endl;
+		std::cout<<"cameraz"<<endl;
+		std::cout<<cameraz<<endl;
+		std::cout<<"mposx"<<endl;
+		std::cout<<mposx<<endl;
+		std::cout<<"mposz"<<endl;
+		std::cout<<mposz<<endl;
+
+		std::cout<<"\n";
+		prevcz = cameraz;
+		prevcx = camerax;
+	}
+	if (camerax > mposx )
+	{
+		if(cameraz > mposz)
+		{
+			mposx += mspeed/2;
+			mposz += mspeed/2;
+		}
+		else if( cameraz < mposz)
+		{
+			mposx += mspeed/2;
+			mposz -= mspeed/2;
+		}
+		else{
+			mposx += mspeed;
+		}
+	}
+
+	else if (camerax < mposx )
+	{
+		if(cameraz > mposz)
+		{
+			mposx -= mspeed/2;
+			mposz += mspeed/2;
+		}
+		else if( cameraz < mposz)
+		{
+			mposx -= mspeed/2;
+			mposz -= mspeed/2;
+		}
+		else{
+			mposx -= mspeed;
+		}
+	}
+	else{
+		if(cameraz > mposz)
+		{
+			std::cout<<cameraz<<std::endl;
+			std::cout<<mposz<<std::endl;
+			mposz += mspeed;
+		}
+		else if( cameraz < mposz)
+		{
+			mposz -= mspeed;
+		}
+		else{
+			// Nothing to do!
+		}
+
+	}
 }

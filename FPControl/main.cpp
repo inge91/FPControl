@@ -301,8 +301,6 @@ void calculate_direction(){
 	}
 
 }
-GLfloat prevx = 0;
-GLfloat prevz = 0;
 GLuint t;
 GLuint alien;
 GLfloat prevdegr = 0;
