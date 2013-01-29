@@ -3,12 +3,14 @@
 #include <stdlib.h>
 #include <GL/glut.h>
 #include <windows.h>
+#define _USE_MATH_DEFINES
+#include <math.h>
 #include <vector>
-
+#include <cmath>
 using namespace std;
 void calculate_direction();
 void calculate_direction_horizontal();
-
+GLuint LoadTextureRAW( const char * filename, int wrap );
 
 GLfloat boxsize = 2;
 bool rotating = false;
@@ -69,8 +71,6 @@ void key_down_func(unsigned char key, int x, int y) {
 	case 27: //Escape key
 			exit(0);
 	}
-	std::cout<<"degrees"<<endl;
-	std::cout<<degrees<<endl;
 }
 
 void key_up_func(unsigned char key, int x, int y) {
@@ -117,13 +117,6 @@ void key_up_func(unsigned char key, int x, int y) {
 	case 27: //Escape key
 			exit(0);
 	}
-		std::cout<<"Positionx"<<endl;
-		std::cout<<positionx<<endl;
-		std::cout<<"Positionz"<<endl;
-		std::cout<<positionz<<endl;
-	std::cout<<"degrees"<<endl;
-	std::cout<<degrees<<endl;
-		std::cout<<"\n";
 }
 
 
@@ -152,7 +145,7 @@ void calculate_direction_horizontal()
 		degrees -= 360;
 
 	}
-	else if(degrees < -180)
+	else if(degrees <= -180)
 	{
 		degrees += 360;
 	}
@@ -190,12 +183,6 @@ void calculate_direction_horizontal()
 	{
 		dirx = (degrees/-90.0);
 		dirz = (1 - dirx);
-		std::cout<<"dirz!"<<endl;
-		std::cout<<dirz<<endl;
-		std::cout<<"\n"<<endl;
-		std::cout<<"dirx!"<<endl;
-		std::cout<<dirx<<endl;
-		std::cout<<"\n"<<endl;
 		//dirx = 0;
 	}
 	// Works
@@ -228,7 +215,7 @@ void calculate_direction(){
 		degrees -= 360;
 
 	}
-	else if(degrees < -180)
+	else if(degrees <= -180)
 	{
 		degrees += 360;
 	}
@@ -291,87 +278,193 @@ void calculate_direction(){
 	}
 
 }
-
+GLfloat prevx = 0;
+GLfloat prevz = 0;
+GLuint t;
+GLfloat prevdegr = 0;
 void drawScene() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
+
 	// Rotate the che camera towards right angle
 	glRotatef(degrees, 0, 1, 0);
-
 
 	// Translate camera to right position
 	glTranslatef(positionx, 0, positionz);
 	prevd = degrees;
 
+
+
+	glColor3f(1, 1, 1);
+	glPushMatrix();
+	GLfloat alienposx = 0;
+	GLfloat alienposz = -20;
+	glTranslatef(0, 0, -20);
+	// Find relative position of player to cube
+	GLfloat relposz = positionz - -alienposz;
+	GLfloat relposx = -positionx - 0;
+	GLfloat rad = 0;
+	GLfloat degr;
+	GLfloat c = sqrt(pow(relposx,2) + pow(relposz,2));
+	if(prevx != positionx || prevz != positionz)
+	{
+	std::cout<<"positionz"<<endl;
+	std::cout<<positionz<<endl;
+	std::cout<<"positionx"<<endl;
+	std::cout<<positionx<<endl;
+	std::cout<<"relposx"<<endl;
+	std::cout<<relposx<<endl;
+	std::cout<<"relposz"<<endl;
+	std::cout<<relposz<<endl;
+	std::cout<<"\n";
+	prevx = positionx;
+	prevz = positionz;
+	}
+	if(relposx == 0 )
+	{
+		degr = 0;
+	}
+	else if(relposz == 0)
+	{
+		degr = 90;
+	}
+	else if(abs(relposx) < abs(relposz))
+	{
+		rad = asin(relposx/c);
+		degr = (rad * 180.0)/M_PI;
+
+	}
+	else{
+		rad = asin(relposx/c);
+		degr = (rad * 180.0)/M_PI;
+	}
+	if(prevdegr != degr) 
+	{
+		std::cout<<"rad"<<endl;
+		std::cout<<rad<<endl;
+		prevdegr = degr;
+	}
+
+
+	glRotatef(degr, 0, 1, 0);
+
+	glBegin(GL_QUADS);
+	glVertex3f(6, -20, 0);
+	glVertex3f(6, 15, 0);
+	glVertex3f(-6, 15, 0);
+	glVertex3f(-6, -20, 0);
+	glEnd();
+	glPopMatrix();
+
+
 	// THIS EXPERIMENT WORKS
 	//Experiment for placement of object depending on rotated axis
-	glPushMatrix();
-	// Rotate 90 degrees around y axis( x = z, z = x)
-	glRotatef(90, 0, 1, 0);
-	// Put the object in the distance
-	glTranslatef(0, 0, -100);
-	glBegin(GL_QUADS);
-	glColor3f(1, 1, 1);
-	glNormal3f(0, 0, 1);
-	glVertex3f(-20, -20, 20 );
-	glVertex3f( 20, -20, 20 );
-	glVertex3f( 20,  20, 20 );
-	glVertex3f(-20,  20, 20 );
-	glEnd();
-	glPopMatrix();
-
-
-
-	glPushMatrix();
-	// Rotate 90 degrees around y axis( x = z, z = x)
-	glRotatef(90, 0, 1, 0);
-	// Put the object in the distance
-	glTranslatef(0, 0, 100);
-	glBegin(GL_QUADS);
-	glColor3f(1, 1, 1);
-	glNormal3f(0, 0, 1);
-	glVertex3f(-20, -20, 20 );
-	glVertex3f( 20, -20, 20 );
-	glVertex3f( 20,  20, 20 );
-	glVertex3f(-20,  20, 20 );
-	glEnd();
-	glPopMatrix();
-
-
-
-	// glTranslatef(0, 0, -position);
-	glBegin(GL_QUADS);
-
-	// Cube around camera
-	// Front
-	glColor3f(1, 0, 0);
-	glNormal3f(0, 0, 1);
-	glVertex3f(-20, -20, 20 );
-	glVertex3f( 20, -20, 20 );
-	glVertex3f( 20,  20, 20 );
-	glVertex3f(-20,  20, 20 );
+	if(t == NULL)
+	{
+		std::cout<< "HELLOO"<<endl;
+	}
 	
-	// Back
-	glNormal3f(0, 0, 1);
-	glColor3f(0, 1, 0);
-	glVertex3f(-20, -20, -20 );
-	glVertex3f( 20, -20, -20 );
-	glVertex3f( 20,  20, -20 );
-	glVertex3f(-20,  20, -20 );
+	glMatrixMode( GL_PROJECTION );
+	glLoadIdentity();
+	gluPerspective( 60, 1, 0.1, 1000.0 );
 
-	// Left 
-	glColor3f(0, 0, 1);
-	glNormal3f(1, 0, 0);
-	glVertex3f(-20, -20, -20 );
-	glVertex3f(-20,  20, -20 );
-	glVertex3f(-20,  20,  20 );
-	glVertex3f(-20,  -20,  20 );
+	GLfloat maxy = 50;
+	GLfloat miny = -20;
+	GLfloat minx = -150;
+	GLfloat maxx = 150;
+	GLfloat minz = -150;
+	GLfloat maxz = 150;
+	GLfloat lengthx = std::abs(minx) +maxx;
+	GLfloat lengthy = std::abs(miny) +maxy;
+	
+	//glColor4f(1, 0,0, 0);
+	  glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, t);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0, 0);
+	glVertex3f(minx,miny, minz);
+	glTexCoord2f(0, 20);
+	glVertex3f(minx,maxy, minz);
+	glTexCoord2f(20, 20);
+	glVertex3f(minx,maxy, maxz);
+	glTexCoord2f(20, 0);
+	glVertex3f(minx,miny, maxz);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+	
+	
+	glColor3f(0, 1, 0);
+	glBegin(GL_QUADS);
+	glVertex3f(minx, maxy, minz);
+	glVertex3f(maxx, maxy, minz);
+	glVertex3f(maxx, maxy, maxz);
+	glVertex3f(minx, maxy, maxz);
+
+	glColor3f(1, 0, 0);
+	glVertex3f(minx, miny, minz);
+	glVertex3f(maxx, miny, minz);
+	glVertex3f(maxx, miny, maxz);
+	glVertex3f(minx, miny, maxz);
 	glEnd();
 
+	
 	glutSwapBuffers();
+}
+// load a 256x256 RGB .RAW file as a texture
+// Taken from 
+GLuint LoadTextureRAW( const char * filename, int wrap )
+{
+    GLuint texture;
+    int width, height;
+    BYTE * data;
+    FILE * file;
+
+    // open texture data
+    file = fopen( filename, "rb" );
+    if ( file == NULL ) return 0;
+
+    // allocate buffer
+    width = 400;
+    height = 400;
+    data = (BYTE*) malloc( width * height * 3 );
+
+    // read texture data
+    fread( data, width * height * 3, 1, file );
+    fclose( file );
+
+    // allocate a texture name
+    glGenTextures( 1, &texture );
+
+    // select our current texture
+    glBindTexture( GL_TEXTURE_2D, texture );
+
+    // select modulate to mix texture with color for shading
+    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+
+    // when texture area is small, bilinear filter the closest mipmap
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+                     GL_LINEAR_MIPMAP_NEAREST );
+    // when texture area is large, bilinear filter the first mipmap
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+
+    // if wrap is true, the texture wraps over at the edges (repeat)
+    //       ... false, the texture ends at the edges (clamp)
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
+                     wrap ? GL_REPEAT : GL_CLAMP );
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
+                     wrap ? GL_REPEAT : GL_CLAMP );
+
+    // build our texture mipmaps
+    gluBuild2DMipmaps( GL_TEXTURE_2D, 3, width, height,
+                       GL_RGB, GL_UNSIGNED_BYTE, data );
+
+    // free buffer
+    free( data );
+
+    return texture;
 }
 
 //Called every 25 milliseconds
@@ -380,16 +473,10 @@ void update(int value) {
 	if(a)
 	{
 	degrees -= 2;
-	std::cout<<"degrees"<<endl;
-	std::cout<<degrees<<endl;
-		std::cout<<"\n";
 	}
 	if(d)
 	{
 		degrees += 2;
-	std::cout<<"degrees"<<endl;
-	std::cout<<degrees<<endl;
-		std::cout<<"\n";
 	}
 	if(w)
 	{
@@ -427,6 +514,7 @@ int main(int argc, char** argv) {
 	//glutFullScreen();
 	initRendering();
 	
+	  t = LoadTextureRAW("bricks3.raw", 1);
 	glutDisplayFunc(drawScene);
 	glutKeyboardFunc(key_down_func);
 	glutKeyboardUpFunc(key_up_func);
