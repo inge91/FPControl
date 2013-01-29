@@ -10,7 +10,7 @@
 using namespace std;
 void calculate_direction();
 void calculate_direction_horizontal();
-GLuint LoadTextureRAW( const char * filename, int wrap );
+GLuint LoadTextureRAW( const char * filename, int wrap, int w, int h );
 
 GLfloat boxsize = 2;
 bool rotating = false;
@@ -281,6 +281,7 @@ void calculate_direction(){
 GLfloat prevx = 0;
 GLfloat prevz = 0;
 GLuint t;
+GLuint alien;
 GLfloat prevdegr = 0;
 void drawScene() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -295,7 +296,6 @@ void drawScene() {
 	// Translate camera to right position
 	glTranslatef(positionx, 0, positionz);
 	prevd = degrees;
-
 
 
 	glColor3f(1, 1, 1);
@@ -335,28 +335,60 @@ void drawScene() {
 	{
 		rad = asin(relposx/c);
 		degr = (rad * 180.0)/M_PI;
+		if(relposz > 0&& relposx > 0)
+		{
+			degr = (90 -degr) + 90 ;
+		}
+		else if(relposx < 0 && relposz >0)
+		{
+			degr = (-90 - degr) -90;
+		}
+
 
 	}
 	else{
 		rad = asin(relposx/c);
 		degr = (rad * 180.0)/M_PI;
+		if(relposz > 0&& relposx > 0)
+		{
+			std::cout<<"HERE"<<endl;
+			degr = (90 -degr) + 90 ;
+		}
+		else if(relposx < 0 && relposz >0)
+		{
+			degr = (-90 - degr) -90;
+		}
 	}
 	if(prevdegr != degr) 
 	{
-		std::cout<<"rad"<<endl;
-		std::cout<<rad<<endl;
+		std::cout<<"degr"<<endl;
+		std::cout<<degr<<endl;
 		prevdegr = degr;
 	}
 
 
 	glRotatef(degr, 0, 1, 0);
 
+	glColor4f(1,1,1, 0);
+	glEnable(GL_TEXTURE_2D);	//glDepthMask(GL_FALSE);
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glColor4f(1,1,1,0);
+    glBindTexture(GL_TEXTURE_2D, alien);
+	
 	glBegin(GL_QUADS);
+	glTexCoord2f(1,1);
 	glVertex3f(6, -20, 0);
+	glTexCoord2f(1, 0);
 	glVertex3f(6, 15, 0);
+	glTexCoord2f(0, 0);
 	glVertex3f(-6, 15, 0);
+	glTexCoord2f(0, 1);
 	glVertex3f(-6, -20, 0);
 	glEnd();
+	glDisable(GL_TEXTURE_2D);
+	//glDisable(GL_BLEND);
+	//glDepthMask(GL_TRUE);
 	glPopMatrix();
 
 
@@ -380,22 +412,19 @@ void drawScene() {
 	GLfloat lengthx = std::abs(minx) +maxx;
 	GLfloat lengthy = std::abs(miny) +maxy;
 	
-	//glColor4f(1, 0,0, 0);
-	  glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, t);
+	glColor4f(1, 0,0, 0);
+	// glEnable(GL_TEXTURE_2D);
+    //glBindTexture(GL_TEXTURE_2D, t);
 	glBegin(GL_QUADS);
-	glTexCoord2f(0, 0);
 	glVertex3f(minx,miny, minz);
-	glTexCoord2f(0, 20);
 	glVertex3f(minx,maxy, minz);
-	glTexCoord2f(20, 20);
 	glVertex3f(minx,maxy, maxz);
-	glTexCoord2f(20, 0);
 	glVertex3f(minx,miny, maxz);
 	glEnd();
-	glDisable(GL_TEXTURE_2D);
+	//glDisable(GL_TEXTURE_2D);
 	
 	
+	glEnable(GL_TEXTURE_2D);
 	glColor3f(0, 1, 0);
 	glBegin(GL_QUADS);
 	glVertex3f(minx, maxy, minz);
@@ -403,19 +432,24 @@ void drawScene() {
 	glVertex3f(maxx, maxy, maxz);
 	glVertex3f(minx, maxy, maxz);
 
-	glColor3f(1, 0, 0);
+
+	glColor4f(1,1,1, 0);
+    glBindTexture(GL_TEXTURE_2D, t);
+	glTexCoord2f(0, 0);
 	glVertex3f(minx, miny, minz);
+	glTexCoord2f(0, 40);
 	glVertex3f(maxx, miny, minz);
+	glTexCoord2f(40, 40);
 	glVertex3f(maxx, miny, maxz);
+	glTexCoord2f(40, 0);
 	glVertex3f(minx, miny, maxz);
 	glEnd();
-
-	
+	glDisable(GL_TEXTURE_2D);
 	glutSwapBuffers();
 }
 // load a 256x256 RGB .RAW file as a texture
-// Taken from 
-GLuint LoadTextureRAW( const char * filename, int wrap )
+// Taken from http://www.nullterminator.net/gltexture.html
+GLuint LoadTextureRAW( const char * filename, int wrap, int w, int h )
 {
     GLuint texture;
     int width, height;
@@ -427,8 +461,8 @@ GLuint LoadTextureRAW( const char * filename, int wrap )
     if ( file == NULL ) return 0;
 
     // allocate buffer
-    width = 400;
-    height = 400;
+    width = w;
+    height = h;
     data = (BYTE*) malloc( width * height * 3 );
 
     // read texture data
@@ -457,6 +491,16 @@ GLuint LoadTextureRAW( const char * filename, int wrap )
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
                      wrap ? GL_REPEAT : GL_CLAMP );
 
+	/*
+	glTexImage2D(GL_TEXTURE_2D, 0, 
+		GL_RGBA,
+		width,
+		height, 
+		0, 
+		GL_RGBA,
+		GL_UNSIGNED_BYTE,
+		data);
+		*/
     // build our texture mipmaps
     gluBuild2DMipmaps( GL_TEXTURE_2D, 3, width, height,
                        GL_RGB, GL_UNSIGNED_BYTE, data );
@@ -514,7 +558,9 @@ int main(int argc, char** argv) {
 	//glutFullScreen();
 	initRendering();
 	
-	  t = LoadTextureRAW("bricks3.raw", 1);
+	// t = LoadTextureRAW("bricks3.raw", 1);
+	t = LoadTextureRAW("tile.raw", 1,90,90);
+	alien = LoadTextureRAW("alien.raw", 1,120,350);
 	glutDisplayFunc(drawScene);
 	glutKeyboardFunc(key_down_func);
 	glutKeyboardUpFunc(key_up_func);
