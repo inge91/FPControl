@@ -456,27 +456,59 @@ void update(int value) {
 	}
 	if(w)
 	{
-	calculate_direction();
-		positionx = positionx - (dirx);
-		positionz = positionz + (dirz);
+	
+		calculate_direction();
+		if(q||e){
+		
+			positionx = positionx - (dirx/2);
+			positionz = positionz + (dirz/2);
+		}
+		else{
+
+			positionx = positionx - (dirx);
+			positionz = positionz + (dirz);
+		}
 	}
 	if(s){
 	calculate_direction();
+		if(q||e){
+		
+			positionx = positionx + (dirx/2);
+			positionz = positionz - (dirz/2);
+		}
+		else{
 		positionx = positionx + (dirx);
 		positionz = positionz - (dirz);
+		}
 	}
 	if(q)
 	{
 		calculate_direction_horizontal();
+		if(w||s)
+		{
+			positionx = positionx + (dirz/2);
+			positionz = positionz - (dirx/2);
+		}
+		else{
+
 		positionx = positionx + (dirz);
 		positionz = positionz - (dirx);
+		}
 
 	}
 	if(e)
 	{
 		calculate_direction_horizontal();
+		if(w||s)
+		{
+		positionx = positionx - (dirz/2);
+		positionz = positionz + (dirx/2);
+		}
+		else{
+
 		positionx = positionx - (dirz);
 		positionz = positionz + (dirx);
+		}
 	}
 
 	glutTimerFunc(25, update, 0);
