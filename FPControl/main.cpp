@@ -8,6 +8,7 @@
 #include <math.h>
 #include <vector>
 #include <cmath>
+#include  "alien.h"
 using namespace std;
 void calculate_direction();
 void calculate_direction_horizontal();
@@ -305,6 +306,7 @@ GLfloat prevz = 0;
 GLuint t;
 GLuint alien;
 GLfloat prevdegr = 0;
+Alien l = Alien(positionx, positionz);
 void drawScene() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
@@ -320,6 +322,8 @@ void drawScene() {
 	prevd = degrees;
 
 
+	l.draw_alien(positionx, positionz);
+
 	glColor3f(1, 1, 1);
 	glPushMatrix();
 	GLfloat alienposx = 0;
@@ -331,8 +335,9 @@ void drawScene() {
 	GLfloat rad = 0;
 	GLfloat degr;
 	GLfloat c = sqrt(pow(relposx,2) + pow(relposz,2));
-	if(prevx != positionx || prevz != positionz)
+	if(prevx != positionx || prevz != positionz && 0)
 	{
+
 	std::cout<<"positionz"<<endl;
 	std::cout<<positionz<<endl;
 	std::cout<<"positionx"<<endl;
@@ -373,7 +378,7 @@ void drawScene() {
 		degr = (rad * 180.0)/M_PI;
 		if(relposz > 0&& relposx > 0)
 		{
-			std::cout<<"HERE"<<endl;
+			//std::cout<<"HERE"<<endl;
 			degr = (90 -degr) + 90 ;
 		}
 		else if(relposx < 0 && relposz >0)
@@ -383,8 +388,8 @@ void drawScene() {
 	}
 	if(prevdegr != degr) 
 	{
-		std::cout<<"degr"<<endl;
-		std::cout<<degr<<endl;
+		//std::cout<<"degr"<<endl;
+		//std::cout<<degr<<endl;
 		prevdegr = degr;
 	}
 

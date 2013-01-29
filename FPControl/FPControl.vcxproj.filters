@@ -27,6 +27,9 @@
     <ClInclude Include="Debug\imageloader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="alien.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc">
@@ -44,6 +47,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Debug\imageloader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="alien.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

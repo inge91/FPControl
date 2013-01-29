@@ -81,6 +81,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="alien.h" />
     <ClInclude Include="Debug\imageloader.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -90,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
+    <ClCompile Include="alien.cpp" />
     <ClCompile Include="Debug\imageloader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp">
