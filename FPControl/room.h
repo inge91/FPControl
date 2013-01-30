@@ -22,10 +22,19 @@ public:
 
 private:
 	void update_level();
+	void draw_floor();
+	void draw_roof();
 	
 	// Textures
 	GLuint mtile;
 	GLuint mwall;
+	GLuint mroof;
 
+	GLfloat maxy;
+	GLfloat miny;
+	GLfloat minx;
+	GLfloat maxx;
+	GLfloat minz;
+	GLfloat maxz;
 };
 #endif
