@@ -166,17 +166,17 @@ Alien l= Alien(p.mpositionx, p.mpositionz);
 void drawScene() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-	p.draw_player();
-
-
-	l.draw_alien(p.mpositionx, p.mpositionz);
-	
-	glMatrixMode( GL_PROJECTION );
+	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective( 60, 1, 0.1, 1000.0 );
+
+
+
+	p.draw_player();
+	
+	//glMatrixMode( GL_MODELVIEW);
+	//glLoadIdentity();
+	glPushMatrix();
 
 	GLfloat maxy = 50;
 	GLfloat miny = -20;
@@ -219,6 +219,10 @@ void drawScene() {
 	glVertex3f(minx, miny, maxz);
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
+	l.draw_alien(p.mpositionx, p.mpositionz);
+	glPopMatrix();
+
+
 	glutSwapBuffers();
 }
 // load a 256x256 RGB .RAW file as a texture
