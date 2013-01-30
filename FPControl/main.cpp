@@ -7,21 +7,20 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <vector>
+#include <cstdlib>
 #include <cmath>
 #include  "alien.h"
-using namespace std;
-void calculate_direction();
-void calculate_direction_horizontal();
-GLuint LoadTextureRAW( const char * filename, int wrap, int w, int h );
+#include "player.h"
+#include "lodepng.h" 
+#include <SOIL.h>
 
+
+
+
+using namespace std;
+GLuint LoadTextureRAW( const char * filename, int wrap, int w, int h );
+ GLuint raw_texture_load(const char *filename, int width, int height);
 GLfloat boxsize = 2;
-bool rotating = false;
-GLfloat degrees = 0;
-GLfloat position = 0;
-GLfloat positionx;
-GLfloat positionz;
-GLfloat dirx;
-GLfloat dirz;
 bool a = false;
 bool d = false;
 bool w = false;
@@ -29,6 +28,7 @@ bool s = false;
 bool q = false;
 bool e = false;
 
+Player p = Player();
 
 
 void key_down_func(unsigned char key, int x, int y) {
@@ -36,41 +36,41 @@ void key_down_func(unsigned char key, int x, int y) {
 	// a-key
 	case 97:
 		a = true;
-		degrees -= 2;
+		p.mdegrees -= 2;
 		break;
 	// d-key
 	case 100:
 		d  = true;
-		degrees += 2;
+		p.mdegrees += 2;
 		break;
 	// w-key
 	case 119:
 		w = true;
-	calculate_direction();
-		positionx = positionx - (dirx);
-		positionz = positionz + (dirz);
+	p.calculate_direction();
+		p.mpositionx = p.mpositionx - (p.mdirx);
+		p.mpositionz = p.mpositionz + (p.mdirz);
 		break;
 	// s-key
 	case 115:
 		s = true;
-	calculate_direction();
-		positionx = positionx + (dirx);
-		positionz = positionz - (dirz);
+	p.calculate_direction();
+		p.mpositionx = p.mpositionx + (p.mdirx);
+		p.mpositionz = p.mpositionz - (p.mdirz);
 		break;
 	// q-key
 	case 113:
-		//positionz = positionx - (dirx);
+		//p.mpositionz = p.mpositionx - (p.mdirx);
 		q = true;
-		calculate_direction_horizontal();
-		positionx = positionx + (dirz);
-		positionz = positionz - (dirx);
+		p.calculate_direction_horizontal();
+		p.mpositionx = p.mpositionx + (p.mdirz);
+		p.mpositionz = p.mpositionz - (p.mdirx);
 		break;
 	case 'e':
 		e = true;
-		//positionz = positionx - (dirx);
-		calculate_direction_horizontal();
-		positionx = positionx - (dirz);
-		positionz = positionz + (dirx);
+		//p.mpositionz = p.mpositionx - (p.mdirx);
+		p.calculate_direction_horizontal();
+		p.mpositionx = p.mpositionx - (p.mdirz);
+		p.mpositionz = p.mpositionz + (p.mdirx);
 		break;
 	case 27: //Escape key
 			exit(0);
@@ -82,41 +82,41 @@ void key_up_func(unsigned char key, int x, int y) {
 	// a-key
 	case 97:
 		a = false;
-		degrees -= 2;
+		p.mdegrees -= 2;
 		break;
 	// d-key
 	case 100:
 		d  = false;
-		degrees += 2;
+		p.mdegrees += 2;
 		break;
 	// w-key
 	case 119:
 		w = false;
-	calculate_direction();
-		positionx = positionx - (dirx);
-		positionz = positionz + (dirz);
+	p.calculate_direction();
+		p.mpositionx = p.mpositionx - (p.mdirx);
+		p.mpositionz = p.mpositionz + (p.mdirz);
 		break;
 	// s-key
 	case 115:
 		s = false;
-	calculate_direction();
-		positionx = positionx + (dirx);
-		positionz = positionz - (dirz);
+	p.calculate_direction();
+		p.mpositionx = p.mpositionx + (p.mdirx);
+		p.mpositionz = p.mpositionz - (p.mdirz);
 		break;
 	// q-key
 	case 113:
 		q = false;
-		calculate_direction_horizontal();
-		//positionz = positionx - (dirx);
-		positionx = positionx + (dirz);
-		positionz = positionz - (dirx);
+		p.calculate_direction_horizontal();
+		//p.mpositionz = p.mpositionx - (p.mdirx);
+		p.mpositionx = p.mpositionx + (p.mdirz);
+		p.mpositionz = p.mpositionz - (p.mdirx);
 		break;
 	case 'e':
 		e = false;
-		//positionz = positionx - (dirx);
-		calculate_direction_horizontal();
-		positionx = positionx - (dirz);
-		positionz = positionz + (dirx);
+		//p.mpositionz = p.mpositionx - (p.mdirx);
+		p.calculate_direction_horizontal();
+		p.mpositionx = p.mpositionx - (p.mdirz);
+		p.mpositionz = p.mpositionz + (p.mdirx);
 		break;
 	case 27: //Escape key
 			exit(0);
@@ -159,176 +159,20 @@ void handleResize(int w, int h) {
 	gluPerspective(45.0, (float)w / (float)h, 1.0, 200.0);
 }
 int prevd = 0;
-
-void calculate_direction_horizontal()
-{
-	// create less possibilities for degrees
-	if (degrees > 180)
-	{
-		degrees -= 360;
-
-	}
-	else if(degrees <= -180)
-	{
-		degrees += 360;
-	}
-	// Works
-	if(degrees == 0 || degrees == 180)
-	{
-		if(degrees ==180)
-		{ dirz = -1;
-		}
-		else{ dirz = 1;
-		}
-		dirx = 0;
-	}
-	// Works
-	else if(degrees == 90 || degrees == -90)
-	{
-		dirx = -degrees/90;
-		dirz = 0;
-	}
-	// Works
-	else if(degrees > 0 && degrees < 90)
-	{
-		dirx = -degrees/90.0;
-		dirz = 1 + dirx;
-	}
-	// Works
-	else if(degrees > 90 && degrees < 180)
-	{
-		// Just act like degrees is between 0 and 90
-		dirz = -((degrees/90.0) -1);
-		dirx = -(1 + dirz);
-	}
-	// Works
-	else if(degrees >-90 && degrees <0)
-	{
-		dirx = (degrees/-90.0);
-		dirz = (1 - dirx);
-		//dirx = 0;
-	}
-	// Works
-	else if(degrees < -90 && degrees > -180)
-	{ 
-		dirz = -((degrees/-90.0) -1);
-		dirx = (1 + dirz);
-	}
-	if(false)
-	{ 
-		std::cout<<"Dirz"<<endl;
-		std::cout<<dirz<<endl;
-    	std::cout<<"Dirx"<<endl;
-	    std::cout<<dirx<<endl;
-		std::cout<<"Positionx"<<endl;
-		std::cout<<positionx<<endl;
-		std::cout<<"Positionz"<<endl;
-		std::cout<<positionz<<endl;
-		std::cout<<"degrees"<<endl;
-		std::cout<<degrees<<endl;
-		std::cout<<"\n";
-	   prevd = degrees;
-	}
-}
-
-void calculate_direction(){
-	// create less possibilities for degrees
-	if (degrees > 180)
-	{
-		degrees -= 360;
-
-	}
-	else if(degrees <= -180)
-	{
-		degrees += 360;
-	}
-	// Works
-	if(degrees == 0 || degrees == 180)
-	{
-		if(degrees ==180)
-		{ dirz = -1;
-		}
-		else{ dirz = 1;
-		}
-		dirx = 0;
-	}
-	// Works
-	else if(degrees == 90 || degrees == -90)
-	{
-		dirx = degrees/90;
-		dirz = 0;
-	}
-	// Works
-	else if(degrees > 0 && degrees < 90)
-	{
-		dirx = degrees/90.0;
-		dirz = 1 - dirx;
-	}
-	// Works
-	else if(degrees > 90 && degrees < 180)
-	{
-		// Just act like degrees is between 0 and 90
-		long temp = degrees - 90;
-		dirz = -((degrees/90.0) -1);
-		dirx = 1 + dirz;
-	}
-	// Works
-	else if(degrees >-90 && degrees <0)
-	{
-		dirx = -(degrees/-90.0);
-		dirz = (1 + dirx);
-	}
-	else if(degrees < -90 && degrees > -180)
-	{ 
-		long temp = degrees + 90;
-		dirz = -((degrees /-90.0)-1);
-		dirx = -(1 + dirz);
-	}
-	if(false)
-	{ 
-		std::cout<<"Dirz"<<endl;
-		std::cout<<dirz<<endl;
-    	std::cout<<"Dirx"<<endl;
-	    std::cout<<dirx<<endl;
-		std::cout<<"Positionx"<<endl;
-		std::cout<<positionx<<endl;
-		std::cout<<"Positionz"<<endl;
-		std::cout<<positionz<<endl;
-		std::cout<<"degrees"<<endl;
-		std::cout<<degrees<<endl;
-		std::cout<<"\n";
-	   prevd = degrees;
-	}
-
-}
 GLuint t;
 GLuint alien;
 GLfloat prevdegr = 0;
-Alien l = Alien(positionx, positionz);
+Alien l= Alien(p.mpositionx, p.mpositionz);
 void drawScene() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-
-	// Rotate the che camera towards right angle
-	glRotatef(degrees, 0, 1, 0);
-
-	// Translate camera to right position
-	glTranslatef(positionx, 0, positionz);
-	prevd = degrees;
+	p.draw_player();
 
 
-	l.draw_alien(positionx, positionz);
-
-
-	// THIS EXPERIMENT WORKS
-	//Experiment for placement of object depending on rotated axis
-	if(t == NULL)
-	{
-		std::cout<< "HELLOO"<<endl;
-	}
+	l.draw_alien(p.mpositionx, p.mpositionz);
 	
 	glMatrixMode( GL_PROJECTION );
 	glLoadIdentity();
@@ -344,15 +188,15 @@ void drawScene() {
 	GLfloat lengthy = std::abs(miny) +maxy;
 	
 	glColor4f(1, 0,0, 0);
-	// glEnable(GL_TEXTURE_2D);
-    //glBindTexture(GL_TEXTURE_2D, t);
+	glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, t);
 	glBegin(GL_QUADS);
 	glVertex3f(minx,miny, minz);
 	glVertex3f(minx,maxy, minz);
 	glVertex3f(minx,maxy, maxz);
 	glVertex3f(minx,miny, maxz);
 	glEnd();
-	//glDisable(GL_TEXTURE_2D);
+	glDisable(GL_TEXTURE_2D);
 	
 	
 	glEnable(GL_TEXTURE_2D);
@@ -446,70 +290,146 @@ void update(int value) {
 	glutPostRedisplay();
 	if(a)
 	{
-	degrees -= 2;
+	p.mdegrees -= 2;
 	}
 	if(d)
 	{
-		degrees += 2;
+		p.mdegrees += 2;
 	}
 	if(w)
 	{
 	
-		calculate_direction();
+		p.calculate_direction();
 		if(q||e){
 		
-			positionx = positionx - (dirx/2);
-			positionz = positionz + (dirz/2);
+			p.mpositionx = p.mpositionx - (p.mdirx/2);
+			p.mpositionz = p.mpositionz + (p.mdirz/2);
 		}
 		else{
 
-			positionx = positionx - (dirx);
-			positionz = positionz + (dirz);
+			p.mpositionx = p.mpositionx - (p.mdirx);
+			p.mpositionz = p.mpositionz + (p.mdirz);
 		}
 	}
 	if(s){
-	calculate_direction();
+	p.calculate_direction();
 		if(q||e){
 		
-			positionx = positionx + (dirx/2);
-			positionz = positionz - (dirz/2);
+			p.mpositionx = p.mpositionx + (p.mdirx/2);
+			p.mpositionz = p.mpositionz - (p.mdirz/2);
 		}
 		else{
-		positionx = positionx + (dirx);
-		positionz = positionz - (dirz);
+		p.mpositionx = p.mpositionx + (p.mdirx);
+		p.mpositionz = p.mpositionz - (p.mdirz);
 		}
 	}
 	if(q)
 	{
-		calculate_direction_horizontal();
+		p.calculate_direction_horizontal();
 		if(w||s)
 		{
-			positionx = positionx + (dirz/2);
-			positionz = positionz - (dirx/2);
+			p.mpositionx = p.mpositionx + (p.mdirz/2);
+			p.mpositionz = p.mpositionz - (p.mdirx/2);
 		}
 		else{
 
-		positionx = positionx + (dirz);
-		positionz = positionz - (dirx);
+		p.mpositionx = p.mpositionx + (p.mdirz);
+		p.mpositionz = p.mpositionz - (p.mdirx);
 		}
 
 	}
 	if(e)
 	{
-		calculate_direction_horizontal();
+		p.calculate_direction_horizontal();
 		if(w||s)
 		{
-		positionx = positionx - (dirz/2);
-		positionz = positionz + (dirx/2);
+		p.mpositionx = p.mpositionx - (p.mdirz/2);
+		p.mpositionz = p.mpositionz + (p.mdirx/2);
 		}
 		else{
 
-		positionx = positionx - (dirz);
-		positionz = positionz + (dirx);
+		p.mpositionx = p.mpositionx - (p.mdirz);
+		p.mpositionz = p.mpositionz + (p.mdirx);
 		}
 	}
 
 	glutTimerFunc(25, update, 0);
+}
+
+
+ GLuint raw_texture_load(const char *filename, int width, int height)
+ {
+     GLuint texture;
+     unsigned char *data;
+     FILE *file;
+ 
+     // open texture data
+     file = fopen(filename, "rb");
+     if (file == NULL) return 0;
+ 
+     // allocate buffer
+     data = (unsigned char*) malloc(width * height * 4);
+ 
+     // read texture data
+     fread(data, width * height * 4, 1, file);
+     fclose(file);
+ 
+     // allocate a texture name
+     glGenTextures(1, &texture);
+ 
+     // select our current texture
+     glBindTexture(GL_TEXTURE_2D, texture);
+ 
+     // select modulate to mix texture with color for shading
+     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+ 
+     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_DECAL);
+     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_DECAL);
+ 
+     // when texture area is small, bilinear filter the closest mipmap
+     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+     // when texture area is large, bilinear filter the first mipmap
+     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+ 
+     // texture should tile
+     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+ 
+     // build our texture mipmaps
+     gluBuild2DMipmaps(GL_TEXTURE_2D, 4, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
+ 
+     // free buffer
+     free(data);
+ 
+     return texture;
+ }
+
+
+GLuint GetTexture(std::string Filename)
+{
+	GLuint tex_ID;
+
+	tex_ID = SOIL_load_OGL_texture(
+				Filename.c_str(),
+				SOIL_LOAD_AUTO,
+				SOIL_CREATE_NEW_ID,
+				SOIL_FLAG_POWER_OF_TWO
+				| SOIL_FLAG_MIPMAPS
+				| SOIL_FLAG_MULTIPLY_ALPHA
+				| SOIL_FLAG_COMPRESS_TO_DXT
+				| SOIL_FLAG_DDS_LOAD_DIRECT
+				| SOIL_FLAG_INVERT_Y
+				);
+
+		if( tex_ID > 0 )
+		{
+			glEnable( GL_TEXTURE_2D );
+			glBindTexture( GL_TEXTURE_2D, tex_ID );
+			
+			return tex_ID;
+		}
+		else
+			return 0;
 }
 
 int main(int argc, char** argv) {
@@ -522,9 +442,12 @@ int main(int argc, char** argv) {
 	
 	// t = LoadTextureRAW("bricks3.raw", 1);
 	t = LoadTextureRAW("tile.raw", 1,90,90);
-	Image* image = loadBMP("alien.bmp");
 	//alien = loadTexture(image);
-	alien = LoadTextureRAW("alien.bmp", 1,90,90);
+	//alien = LoadTextureRAW("alien5.png", 1, 120,350);
+	alien = GetTexture("alien5.png");
+	//alien = raw_texture_load("alien.raw",  120, 350);
+
+	l.set_texture(alien);
 
 	glutDisplayFunc(drawScene);
 	glutKeyboardFunc(key_down_func);

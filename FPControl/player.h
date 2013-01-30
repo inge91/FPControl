@@ -12,10 +12,13 @@ public:
 	// Postion of the player
 	GLfloat mpositionx;
 	GLfloat mpositionz; 
-
+	GLfloat mdegrees;
+	GLfloat mdirx;
+	GLfloat mdirz;
 
 	void draw_player();
-	
+	void calculate_direction_horizontal();
+	void calculate_direction();
 
 };
 

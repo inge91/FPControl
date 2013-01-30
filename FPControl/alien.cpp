@@ -86,23 +86,30 @@ void Alien::draw_alien(GLfloat camerax, GLfloat cameraz)
 	glTranslatef(mposx, 0, mposz);
 	glRotatef(mdegrees, 0, 1, 0);
 
-	glColor4f(1,1,1, 0);
-	//glEnable(GL_TEXTURE_2D);
-    //glBindTexture(GL_TEXTURE_2D, t);
-	
+	glColor4f(1,1,1, 1);
+	glEnable(GL_TEXTURE_2D);
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable (GL_BLEND);
+    glBindTexture(GL_TEXTURE_2D, malien);
 	glBegin(GL_QUADS);
+	glTexCoord2f(1, 1);
 	glVertex3f(6, -20, 0);
+	glTexCoord2f(1, 0);
 	glVertex3f(6, 15, 0);
+	glTexCoord2f(0, 0);
 	glVertex3f(-6, 15, 0);
+	glTexCoord2f(0, 1);
 	glVertex3f(-6, -20, 0);
 	glEnd();
-	//glDisable(GL_TEXTURE_2D);
+	glDisable (GL_BLEND);
+	glDisable(GL_TEXTURE_2D);
 	//glDisable(GL_BLEND);
 	//glDepthMask(GL_TRUE);
+	glPopMatrix();
 
+	// Give new position to alien
 	move_alien(camerax, cameraz);
 
-	glPopMatrix();
 }
 
 GLfloat prevcx = 0;
@@ -176,4 +183,9 @@ void Alien::move_alien(GLfloat camerax, GLfloat cameraz)
 		}
 
 	}
+}
+
+void Alien::set_texture(GLuint t)
+{
+	malien = t;
 }

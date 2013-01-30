@@ -20,12 +20,14 @@ public:
 	// Rotation of the alien
 	GLfloat mdegrees;
 	void draw_alien(GLfloat camerax, GLfloat cameraz);
+	void set_texture(GLuint t);
 
 
 private:
 	GLfloat mspeed;
 	void calculate_degrees(GLfloat camerax, GLfloat cameraz);
 	void move_alien(GLfloat camerax, GLfloat cameraz);
+	GLuint malien;
 
 };
 #endif

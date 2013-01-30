@@ -56,8 +56,9 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies />
+      <AdditionalDependencies>soil.lib</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>C:\Users\Inge\Downloads\soil\Simple OpenGL Image Library\projects\VC9\Debug;C:\Users\Inge\Downloads\soil\Simple OpenGL Image Library\src;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -83,6 +84,8 @@
   <ItemGroup>
     <ClInclude Include="alien.h" />
     <ClInclude Include="Debug\imageloader.h" />
+    <ClInclude Include="lodepng.h" />
+    <ClInclude Include="player.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
@@ -93,7 +96,9 @@
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="alien.cpp" />
     <ClCompile Include="Debug\imageloader.cpp" />
+    <ClCompile Include="londepng.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="player.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
