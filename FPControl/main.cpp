@@ -1,19 +1,6 @@
-#include "StdAfx.h"
-#include <iostream>
-#include <stdlib.h>
-#include <GL/glut.h>
-#include <windows.h>
-#include "imageloader.h"
-#define _USE_MATH_DEFINES
-#include <math.h>
-#include <vector>
-#include <cstdlib>
-#include <cmath>
-#include  "alien.h"
-#include "player.h"
-#include "lodepng.h" 
-#include <SOIL.h>
 
+#include "StdAfx.h"
+#include "main.h"
 
 
 
@@ -29,6 +16,7 @@ bool q = false;
 bool e = false;
 
 Player p = Player();
+Room r = Room();
 
 
 void key_down_func(unsigned char key, int x, int y) {
@@ -173,11 +161,11 @@ void drawScene() {
 
 
 	p.draw_player();
-	
-	//glMatrixMode( GL_MODELVIEW);
-	//glLoadIdentity();
-	glPushMatrix();
 
+
+	r.draw_level();
+
+	/*
 	GLfloat maxy = 50;
 	GLfloat miny = -20;
 	GLfloat minx = -150;
@@ -219,8 +207,10 @@ void drawScene() {
 	glVertex3f(minx, miny, maxz);
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
+	*/
+	//glMatrixMode( GL_MODELVIEW);
+	//glLoadIdentity();
 	l.draw_alien(p.mpositionx, p.mpositionz);
-	glPopMatrix();
 
 
 	glutSwapBuffers();
@@ -427,6 +417,9 @@ GLuint GetTexture(std::string Filename)
 
 		if( tex_ID > 0 )
 		{
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
 			glEnable( GL_TEXTURE_2D );
 			glBindTexture( GL_TEXTURE_2D, tex_ID );
 			
@@ -443,15 +436,9 @@ int main(int argc, char** argv) {
 	glutCreateWindow("FPS");
 	//glutFullScreen();
 	initRendering();
-	
-	// t = LoadTextureRAW("bricks3.raw", 1);
-	t = LoadTextureRAW("tile.raw", 1,90,90);
-	//alien = loadTexture(image);
-	//alien = LoadTextureRAW("alien5.png", 1, 120,350);
-	alien = GetTexture("alien5.png");
-	//alien = raw_texture_load("alien.raw",  120, 350);
 
-	l.set_texture(alien);
+	r.set_textures();
+	l.set_texture();
 
 	glutDisplayFunc(drawScene);
 	glutKeyboardFunc(key_down_func);

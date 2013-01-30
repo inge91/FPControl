@@ -23,22 +23,6 @@ void Alien::calculate_degrees( GLfloat camerax, GLfloat cameraz)
 	GLfloat rad = 0;
 	GLfloat c = sqrt(pow(relposx,2) + pow(relposz,2));
 
-	/*
-	if(prevxx != camerax || prevzz != cameraz)
-	{
-
-	std::cout<<"positionz"<<endl;
-	std::cout<<cameraz<<endl;
-	std::cout<<"positionx"<<endl;
-	std::cout<<camerax<<endl;
-	std::cout<<"relposx"<<endl;
-	std::cout<<relposx<<endl;
-	std::cout<<"relposz"<<endl;
-	std::cout<<relposz<<endl;
-	std::cout<<"\n";
-	prevxx = camerax;
-	prevzz = cameraz;
-	}*/
 	if(relposx == 0 )
 	{
 		mdegrees = 0;
@@ -67,7 +51,6 @@ void Alien::calculate_degrees( GLfloat camerax, GLfloat cameraz)
 		mdegrees = (rad * 180.0)/M_PI;
 		if(relposz > 0&& relposx > 0)
 		{
-			//std::cout<<"HERE"<<endl;
 			mdegrees = (90 -mdegrees) + 90 ;
 		}
 		else if(relposx < 0 && relposz >0)
@@ -87,19 +70,19 @@ void Alien::draw_alien(GLfloat camerax, GLfloat cameraz)
 	glRotatef(mdegrees, 0, 1, 0);
 
 	glColor4f(1,1,1, 1);
+	if(malien == NULL)
+	{
+		std::cout<<"hELLOOO";
+	}
 	glEnable(GL_TEXTURE_2D);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable (GL_BLEND);
     glBindTexture(GL_TEXTURE_2D, malien);
 	glBegin(GL_QUADS);
-	glTexCoord2f(1, 1);
-	glVertex3f(6, -20, 0);
-	glTexCoord2f(1, 0);
-	glVertex3f(6, 15, 0);
-	glTexCoord2f(0, 0);
-	glVertex3f(-6, 15, 0);
-	glTexCoord2f(0, 1);
-	glVertex3f(-6, -20, 0);
+	glTexCoord2f(0, 0); glVertex3f(5,  -20, 0);
+	glTexCoord2f(0, 1); glVertex3f(5,   8, 0);
+	glTexCoord2f(1, 1); glVertex3f(-5,  8, 0);
+	glTexCoord2f(1, 0); glVertex3f(-5, -20, 0);
 	glEnd();
 	glDisable (GL_BLEND);
 	glDisable(GL_TEXTURE_2D);
@@ -185,7 +168,7 @@ void Alien::move_alien(GLfloat camerax, GLfloat cameraz)
 	}
 }
 
-void Alien::set_texture(GLuint t)
+void Alien::set_texture()
 {
-	malien = t;
+	malien = GetTexture("alien7.tga");
 }

@@ -9,6 +9,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include "main.h"
 using namespace std;
 class Alien
 {
@@ -20,7 +21,7 @@ public:
 	// Rotation of the alien
 	GLfloat mdegrees;
 	void draw_alien(GLfloat camerax, GLfloat cameraz);
-	void set_texture(GLuint t);
+	void set_texture();
 
 
 private:
