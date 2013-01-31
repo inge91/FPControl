@@ -11,6 +11,8 @@ Player::Player()
 	calculate_direction();
 }
 
+GLfloat prevx = 0;
+GLfloat prevz = 0;
 
 void Player::draw_player()
 {
@@ -18,6 +20,15 @@ void Player::draw_player()
 	// Rotate the camera towards right angle
 	glRotatef(mdegrees, 0, 1, 0);
 
+	if(prevx != mpositionx || prevz != mpositionz && 0)
+	{
+
+		cout<<"("<<mpositionx<<","<<mpositionz<<")"<<endl;
+		prevx = mpositionx;
+		prevz = mpositionz;
+
+
+	}
 	// Translate camera to right position
 	glTranslatef(mpositionx, 0, mpositionz);
 	

@@ -20,7 +20,7 @@ public:
 	vector<pair<pair<GLfloat, GLfloat>, pair<GLfloat, GLfloat>>> mcoordinates;
 	void draw_level();
 	void set_textures();
-	bool detect_collision(pair<GLfloat, GLfloat>prev, pair<GLfloat, GLfloat>next);
+	pair<GLfloat, GLfloat> detect_collision(pair<GLfloat, GLfloat>prev, pair<GLfloat, GLfloat>next);
 
 private:
 	void update_level();

@@ -4,6 +4,9 @@
 #define PLAYER_H_INCLUDED
 
 #include <GL/glut.h>
+#include <iostream>
+
+using namespace std;
 class Player{
 
 public:

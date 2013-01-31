@@ -9,7 +9,7 @@ Room::Room()
     maxx = 150;
     minz = -150;
     maxz = 150;
-	mlevelno ="1";
+	mlevelno ="5";
 	update_level();
 }
 
@@ -141,7 +141,6 @@ void Room::update_level()
 					// Fill the next number
 					if(a == -1)
 					{
-						std::cout<<"a gets value "<<a<<endl;
 						a = atoi(temp.c_str());
 					}
 					else if (b == -1)
@@ -164,12 +163,9 @@ void Room::update_level()
 					// Reset temp
 					temp = "";
 				}
-				std::cout<<"it was nothing"<<endl;
 			}
 			else{
 				temp += line[i];
-				std::cout<<"it was a number: "<< endl; 
-				std::cout<<line[i]<<endl;
 			}
 
 		}
@@ -177,7 +173,6 @@ void Room::update_level()
 		// Fill the next number
 		if(a == -1)
 		{
-			std::cout<<"a gets value "<<a<<endl;
 			a = atoi(temp.c_str());
 		}
 		else if (b == -1)
@@ -201,10 +196,6 @@ void Room::update_level()
 		b = (b - 15) * 10;
 		c = (c - 15) * 10;
 		d = (d - 15) * 10;
-		std::cout<<a<<" ";
-		std::cout<<b<<" ";
-		std::cout<<c<<" ";
-		std::cout<<d<<endl;
 		pair <GLfloat, GLfloat> p1 (a,b);
 		pair <GLfloat, GLfloat> p2 (c,d);
 		pair <pair<GLfloat, GLfloat>, pair<GLfloat, GLfloat>>  p3 (p1, p2);
@@ -218,7 +209,7 @@ void Room::update_level()
 
 }
 
-bool Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<GLfloat, GLfloat>next)
+pair <GLfloat, GLfloat> Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<GLfloat, GLfloat>next)
 {
 
 	GLfloat x1;
@@ -228,13 +219,13 @@ bool Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<GLfloat, GLfloat>ne
 
 	GLfloat prevx = prev.first;
 	GLfloat prevz = prev.second;
-	GLfloat nextx = next.first+0.2;
-	GLfloat nextz = next.second+0.2;
-	std::cout<<"\n"<<endl;
-	std::cout<<"nextx"<<endl;
-	std::cout<<nextx<<endl;
-	std::cout<<"nextz"<<endl;
-	std::cout<<nextz<<endl;
+	GLfloat nextx = next.first;
+	GLfloat nextz = next.second;
+	//std::cout<<"\n"<<endl;
+	//std::cout<<"nextx"<<endl;
+	//std::cout<<nextx<<endl;
+	//std::cout<<"nextz"<<endl;
+	//std::cout<<nextz<<endl;
 	
 
 	pair <pair<GLfloat, GLfloat>, pair<GLfloat, GLfloat>>  p;
@@ -245,8 +236,8 @@ bool Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<GLfloat, GLfloat>ne
 		z1 = p.first.second;
 		x2 = p.second.first;
 		z2 = p.second.second;
-		std::cout<<"walls"<<endl;
-		std::cout<<x1<< ","<<z1<< " " <<x2<<","<<z2<<endl;
+		//std::cout<<"walls"<<endl;
+		//std::cout<<x1<< ","<<z1<< " " <<x2<<","<<z2<<endl;
 		// Horizontal wall
 		if (z1 == z2)
 		{
@@ -254,22 +245,35 @@ bool Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<GLfloat, GLfloat>ne
 			if(x1 < x2)
 			{
 				// If nextx is positioned next to wall see if y value changes
-				if( nextx >= x1 && nextx <= x2 )
+				if( -nextx >= x1 && -nextx <= x2 )
 				{
-					if(prevz <= z1 && nextz > z1)
-						return true;
-					else if(prevz >= z1  && nextz < z1)
-						return true;
+					if(-prevz <=  z1 && -nextz > z1)
+					{
+						next.second = prevz;
+						return next;
+					}
+					else if(-prevz >= z1  && -nextz < z1)
+					{
+						next.second = prevz;
+						return next;
+					}
 				}
 			}
 			else{
 				// If nextx is positioned next to wall see if y value changes
-				if( nextx >= x2 && nextx <= x1 )
+				if( -nextx >= x2 && -nextx <= x1 )
 				{
-					if(prevz <= z1 && nextz > z1)
-						return true;
-					else if(prevz >= z1  && nextz < z1)
-						return true;
+					if(-prevz <= z1 && -nextz > z1)
+
+					{						next.second = prevz;
+						return next;
+						
+					}
+					else if(-prevz >= z1  && -nextz < z1)
+					{
+						next.second = prevz;
+						return next;
+					}
 				}
 
 			}
@@ -280,22 +284,35 @@ bool Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<GLfloat, GLfloat>ne
 			if(z1 < z2)
 			{
 				// If nextx is positioned next to wall see if y value changes
-				if( nextz >= z1 && nextz <= z2 )
+				if( -nextz >= z1 && -nextz <= z2 )
 				{
-					if(prevx <= x1 && nextx > x1)
-						return true;
-					else if(prevx >= x1  && nextx < x1)
-						return true;
+					if(-prevx <= x1 && -nextx > x1)
+					{
+						next.first = prevx;
+						return next;
+					}
+					else if(-prevx >= x1  && -nextx < x1)
+					{
+						next.first = prevx;
+						return next;
+					}
 				}
 			}
 			else{
 				// If nextx is positioned next to wall see if y value changes
-				if( nextz >= z2 && nextz <= z1 )
+				if( -nextz >= z2 && -nextz <= z1 )
 				{
-					if(prevx <= x1 && nextx > x1)
-						return true;
-					else if(prevx >= x1  && nextx < x1)
-						return true;
+					if(-prevx <= x1 && -nextx > x1)
+					{
+						next.first = prevx;
+						return next;
+					}
+					else if(-prevx >= x1  && -nextx < x1)
+					{
+						next.first = prevx;
+						return next;
+					}
+
 				}
 
 			}
@@ -303,6 +320,6 @@ bool Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<GLfloat, GLfloat>ne
 		// Vertical wall
 		
 	}
-	return false;
+	return next;
 
 }

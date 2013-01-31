@@ -24,6 +24,7 @@ void key_down_func(unsigned char key, int x, int y) {
 	GLfloat tempz;
 	pair <GLfloat, GLfloat> pprev;
 	pair <GLfloat, GLfloat> pnext;
+	pair <GLfloat, GLfloat> temp;
 	switch (key) {
 	// a-key
 	case 97:
@@ -46,22 +47,15 @@ void key_down_func(unsigned char key, int x, int y) {
 		pprev.second = p.mpositionz;
 		pnext.first = tempx;
 		pnext.second = tempz;
-		if( r.detect_collision(pprev, pnext))
-		{
-			// pass
-		}
-		else{
+		temp = r.detect_collision(pprev, pnext);
+		p.mpositionx = temp.first;
+		p.mpositionz = temp.second;
 
-		
-			p.mpositionx = p.mpositionx - (p.mdirx);
-			p.mpositionz = p.mpositionz + (p.mdirz);
-
-		}
 		break;
 	// s-key
 	case 115:
 		s = true;
-	p.calculate_direction();
+		p.calculate_direction();
 		tempx = p.mpositionx + (p.mdirx);
 		tempz = p.mpositionz - (p.mdirz);
 
@@ -69,17 +63,11 @@ void key_down_func(unsigned char key, int x, int y) {
 		pprev.second = p.mpositionz;
 		pnext.first = tempx;
 		pnext.second = tempz;
-		if( r.detect_collision(pprev, pnext))
-		{
-			// pass
-		}
-		else{
-
+		temp = r.detect_collision(pprev, pnext);
+		p.mpositionx = temp.first;
+		p.mpositionz = temp.second;
+	
 		
-			p.mpositionx = p.mpositionx + (p.mdirx);
-			p.mpositionz = p.mpositionz - (p.mdirz);
-
-		}
 		break;
 	// q-key
 	case 113:
@@ -93,18 +81,10 @@ void key_down_func(unsigned char key, int x, int y) {
 		pprev.second = p.mpositionz;
 		pnext.first = tempx;
 		pnext.second = tempz;
-		if( r.detect_collision(pprev, pnext))
-		{
-			// pass
-		}
-		else{
-
-		
-			p.mpositionx = p.mpositionx + (p.mdirz);
-			p.mpositionz = p.mpositionz - (p.mdirx);
-
-		}
-
+		temp = r.detect_collision(pprev, pnext);
+		p.mpositionx = temp.first;
+		p.mpositionz = temp.second;
+	
 
 		break;
 	case 'e':
@@ -117,17 +97,10 @@ void key_down_func(unsigned char key, int x, int y) {
 		pprev.second = p.mpositionz;
 		pnext.first = tempx;
 		pnext.second = tempz;
-		if( r.detect_collision(pprev, pnext))
-		{
-			// pass
-		}
-		else{
-
-		
-			p.mpositionx = p.mpositionx - (p.mdirz);
-			p.mpositionz = p.mpositionz + (p.mdirx);
-
-		}
+		temp = r.detect_collision(pprev, pnext);
+		p.mpositionx = temp.first;
+		p.mpositionz = temp.second;
+	
 
 		break;
 	case 27: //Escape key
@@ -140,6 +113,7 @@ void key_up_func(unsigned char key, int x, int y) {
 	GLfloat tempz;
 	pair <GLfloat, GLfloat> pprev;
 	pair <GLfloat, GLfloat> pnext;
+	pair <GLfloat, GLfloat> temp;
 
 	switch (key) {
 	// a-key
@@ -162,17 +136,9 @@ void key_up_func(unsigned char key, int x, int y) {
 		pprev.second = p.mpositionz;
 		pnext.first = tempx;
 		pnext.second = tempz;
-		if( r.detect_collision(pprev, pnext))
-		{
-			// pass
-		}
-		else{
-
-		
-			p.mpositionx = p.mpositionx - (p.mdirx);
-			p.mpositionz = p.mpositionz + (p.mdirz);
-
-		}
+	temp = r.detect_collision(pprev, pnext);
+		p.mpositionx = temp.first;
+		p.mpositionz = temp.second;
 		break;
 	// s-key
 	case 115:
@@ -184,17 +150,9 @@ void key_up_func(unsigned char key, int x, int y) {
 		pprev.second = p.mpositionz;
 		pnext.first = tempx;
 		pnext.second = tempz;
-		if( r.detect_collision(pprev, pnext))
-		{
-			// pass
-		}
-		else{
-
-		
-			p.mpositionx = p.mpositionx + (p.mdirx);
-			p.mpositionz = p.mpositionz - (p.mdirz);
-
-		}
+	temp = r.detect_collision(pprev, pnext);
+		p.mpositionx = temp.first;
+		p.mpositionz = temp.second;
 		break;
 	// q-key
 	case 113:
@@ -206,18 +164,9 @@ void key_up_func(unsigned char key, int x, int y) {
 		pprev.second = p.mpositionz;
 		pnext.first = tempx;
 		pnext.second = tempz;
-		
-		if( r.detect_collision(pprev, pnext))
-		{
-			// pass
-		}
-		else{
-
-		
-			p.mpositionx = p.mpositionx + (p.mdirz);
-			p.mpositionz = p.mpositionz - (p.mdirx);
-
-		}
+			temp = r.detect_collision(pprev, pnext);
+		p.mpositionx = temp.first;
+		p.mpositionz = temp.second;
 		break;
 	case 'e':
 		e = false;
@@ -231,17 +180,9 @@ void key_up_func(unsigned char key, int x, int y) {
 		pnext.first = tempx;
 		pnext.second = tempz;
 
-		if( r.detect_collision(pprev, pnext))
-		{
-			// pass
-		}
-		else{
-
-		
-			p.mpositionx = p.mpositionx - (p.mdirz);
-			p.mpositionz = p.mpositionz + (p.mdirx);
-
-		}
+		temp = r.detect_collision(pprev, pnext);
+		p.mpositionx = temp.first;
+		p.mpositionz = temp.second;
 		break;
 	case 27: //Escape key
 			exit(0);
@@ -285,7 +226,7 @@ void handleResize(int w, int h) {
 }
 int prevd = 0;
 GLuint t;
-GLuint alien;
+//GLuint alien;
 GLfloat prevdegr = 0;
 Alien l= Alien(p.mpositionx, p.mpositionz);
 void drawScene() {
@@ -347,7 +288,7 @@ void drawScene() {
 	*/
 	//glMatrixMode( GL_MODELVIEW);
 	//glLoadIdentity();
-	l.draw_alien(p.mpositionx, p.mpositionz);
+	//l.draw_alien(p.mpositionx, p.mpositionz);
 
 
 	glutSwapBuffers();
@@ -438,17 +379,9 @@ void update(int value) {
 		GLfloat tempz = p.mpositionz + (p.mdirz/2);
 		pair <GLfloat, GLfloat> pprev (p.mpositionx, p.mpositionz);
 		pair <GLfloat, GLfloat> pnext (tempx, tempz);
-		if( r.detect_collision(pprev, pnext))
-		{
-			// pass
-		}
-		else{
-
-		
-			p.mpositionx = p.mpositionx - (p.mdirx/2);
-			p.mpositionz = p.mpositionz + (p.mdirz/2);
-
-		}
+		pair <GLfloat, GLfloat> temp = r.detect_collision(pprev, pnext);
+		p.mpositionx = temp.first;
+		p.mpositionz = temp.second;
 
 
 		}
@@ -459,17 +392,9 @@ void update(int value) {
 		GLfloat tempz = p.mpositionz + (p.mdirz);
 		pair <GLfloat, GLfloat> pprev (p.mpositionx, p.mpositionz);
 		pair <GLfloat, GLfloat> pnext (tempx, tempz);
-		if( r.detect_collision(pprev, pnext))
-		{
-			// pass
-		}
-		else{
-
-		
-			p.mpositionx = p.mpositionx - (p.mdirx);
-			p.mpositionz = p.mpositionz + (p.mdirz);
-
-		}
+	pair <GLfloat, GLfloat> temp = r.detect_collision(pprev, pnext);
+		p.mpositionx = temp.first;
+		p.mpositionz = temp.second;
 
 
 		}
@@ -482,17 +407,9 @@ void update(int value) {
 		GLfloat tempz = p.mpositionz - (p.mdirz/2);
 		pair <GLfloat, GLfloat> pprev (p.mpositionx, p.mpositionz);
 		pair <GLfloat, GLfloat> pnext (tempx, tempz);
-		if( r.detect_collision(pprev, pnext))
-		{
-			// pass
-		}
-		else{
-
-		
-			p.mpositionx = p.mpositionx + (p.mdirx/2);
-			p.mpositionz = p.mpositionz - (p.mdirz/2);
-
-		}
+		pair <GLfloat, GLfloat> temp = r.detect_collision(pprev, pnext);
+		p.mpositionx = temp.first;
+		p.mpositionz = temp.second;
 
 
 		}
@@ -503,17 +420,9 @@ void update(int value) {
 		GLfloat tempz = p.mpositionz - (p.mdirz);
 		pair <GLfloat, GLfloat> pprev (p.mpositionx, p.mpositionz);
 		pair <GLfloat, GLfloat> pnext (tempx, tempz);
-		if( r.detect_collision(pprev, pnext))
-		{
-			// pass
-		}
-		else{
-
-		
-			p.mpositionx = p.mpositionx + (p.mdirx);
-			p.mpositionz = p.mpositionz - (p.mdirz);
-
-		}
+		pair <GLfloat, GLfloat> temp = r.detect_collision(pprev, pnext);
+		p.mpositionx = temp.first;
+		p.mpositionz = temp.second;
 
 
 		}
@@ -529,17 +438,9 @@ void update(int value) {
 		GLfloat tempz = p.mpositionz - (p.mdirx/2);
 		pair <GLfloat, GLfloat> pprev (p.mpositionx, p.mpositionz);
 		pair <GLfloat, GLfloat> pnext (tempx, tempz);
-		if( r.detect_collision(pprev, pnext))
-		{
-			// pass
-		}
-		else{
-
-		
-			p.mpositionx = p.mpositionx + (p.mdirz/2);
-			p.mpositionz = p.mpositionz - (p.mdirx/2);
-
-		}
+		pair <GLfloat, GLfloat> temp = r.detect_collision(pprev, pnext);
+		p.mpositionx = temp.first;
+		p.mpositionz = temp.second;
 
 
 		}
@@ -550,17 +451,9 @@ void update(int value) {
 		GLfloat tempz = p.mpositionz - (p.mdirx);
 		pair <GLfloat, GLfloat> pprev (p.mpositionx, p.mpositionz);
 		pair <GLfloat, GLfloat> pnext (tempx, tempz);
-		if( r.detect_collision(pprev, pnext))
-		{
-			// pass
-		}
-		else{
-
-		
-			p.mpositionx = p.mpositionx + (p.mdirz);
-			p.mpositionz = p.mpositionz - (p.mdirx);
-
-		}
+		pair <GLfloat, GLfloat> temp = r.detect_collision(pprev, pnext);
+		p.mpositionx = temp.first;
+		p.mpositionz = temp.second;
 
 
 
@@ -577,20 +470,9 @@ void update(int value) {
 		GLfloat tempz = p.mpositionz + (p.mdirx/2);
 		pair <GLfloat, GLfloat> pprev (p.mpositionx, p.mpositionz);
 		pair <GLfloat, GLfloat> pnext (tempx, tempz);
-		if( r.detect_collision(pprev, pnext))
-		{
-			// pass
-		}
-		else{
-
-		
-			p.mpositionx = p.mpositionx - (p.mdirz/2);
-			p.mpositionz = p.mpositionz + (p.mdirx/2);
-
-		}
-
-		p.mpositionx = p.mpositionx - (p.mdirz/2);
-		p.mpositionz = p.mpositionz + (p.mdirx/2);
+		pair <GLfloat, GLfloat> temp = r.detect_collision(pprev, pnext);
+		p.mpositionx = temp.first;
+		p.mpositionz = temp.second;
 		}
 		else{
 
@@ -598,17 +480,9 @@ void update(int value) {
 		GLfloat tempz = p.mpositionz + (p.mdirx);
 		pair <GLfloat, GLfloat> pprev (p.mpositionx, p.mpositionz);
 		pair <GLfloat, GLfloat> pnext (tempx, tempz);
-		if( r.detect_collision(pprev, pnext))
-		{
-			// pass
-		}
-		else{
-
-		
-			p.mpositionx = p.mpositionx - (p.mdirz);
-			p.mpositionz = p.mpositionz + (p.mdirx);
-
-		}
+		pair <GLfloat, GLfloat> temp = r.detect_collision(pprev, pnext);
+		p.mpositionx = temp.first;
+		p.mpositionz = temp.second;
 		}
 	}
 
