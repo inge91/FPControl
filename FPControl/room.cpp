@@ -216,16 +216,6 @@ void Room::update_level()
 
 }
 
-	/*
-void Room::update_level()
-{
-	// load coords into mcoordinates
-	load_coords();
-	string leveltxt = string("level") +  string(mlevelno) + string("coords.txt");
-	ifstream myfile (leveltxt);
-
-}
-*/
 }
 
 bool Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<GLfloat, GLfloat>next)
@@ -240,6 +230,13 @@ bool Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<GLfloat, GLfloat>ne
 	GLfloat prevz = prev.second;
 	GLfloat nextx = next.first+0.2;
 	GLfloat nextz = next.second+0.2;
+	std::cout<<"\n"<<endl;
+	std::cout<<"nextx"<<endl;
+	std::cout<<nextx<<endl;
+	std::cout<<"nextz"<<endl;
+	std::cout<<nextz<<endl;
+	
+
 	pair <pair<GLfloat, GLfloat>, pair<GLfloat, GLfloat>>  p;
 	for (unsigned i=0; i<mcoordinates.size(); i++)
 	{
@@ -248,6 +245,8 @@ bool Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<GLfloat, GLfloat>ne
 		z1 = p.first.second;
 		x2 = p.second.first;
 		z2 = p.second.second;
+		std::cout<<"walls"<<endl;
+		std::cout<<x1<< ","<<z1<< " " <<x2<<","<<z2<<endl;
 		// Horizontal wall
 		if (z1 == z2)
 		{
