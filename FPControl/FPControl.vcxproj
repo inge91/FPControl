@@ -69,8 +69,9 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies />
+      <AdditionalDependencies>C:\Users\Inge\Downloads\soil\Simple OpenGL Image Library\projects\VC9\Debug\SOIL.lib;C:\Users\Inge\Downloads\soil\Simple OpenGL Image Library\lib\libSOIL.a</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>C:\Users\Inge\Downloads\soil\Simple OpenGL Image Library\lib;C:\Users\Inge\Downloads\soil\Simple OpenGL Image Library\projects\VC9\Debug</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

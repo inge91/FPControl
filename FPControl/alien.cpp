@@ -70,10 +70,7 @@ void Alien::draw_alien(GLfloat camerax, GLfloat cameraz)
 	glRotatef(mdegrees, 0, 1, 0);
 
 	glColor4f(1,1,1, 1);
-	if(malien == NULL)
-	{
-		std::cout<<"hELLOOO";
-	}
+
 	glEnable(GL_TEXTURE_2D);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable (GL_BLEND);
@@ -102,7 +99,7 @@ void Alien::move_alien(GLfloat camerax, GLfloat cameraz)
 {
 	camerax = -camerax;
 	cameraz = -cameraz;
-	if(camerax !=prevcx || cameraz != prevcz)
+	if(camerax !=prevcx || cameraz != prevcz && 0)
 	{
 		std::cout<<"camerax"<<endl;
 		std::cout<<camerax<<endl;
@@ -153,8 +150,8 @@ void Alien::move_alien(GLfloat camerax, GLfloat cameraz)
 	else{
 		if(cameraz > mposz)
 		{
-			std::cout<<cameraz<<std::endl;
-			std::cout<<mposz<<std::endl;
+			//std::cout<<cameraz<<std::endl;
+			//std::cout<<mposz<<std::endl;
 			mposz += mspeed;
 		}
 		else if( cameraz < mposz)

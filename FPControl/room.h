@@ -9,6 +9,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <fstream>
 #include "main.h"
 using namespace std;
 class Room
@@ -23,7 +24,9 @@ public:
 private:
 	void update_level();
 	void draw_floor();
+	void draw_walls();
 	void draw_roof();
+	void load_coords();
 	
 	// Textures
 	GLuint mtile;
@@ -36,5 +39,7 @@ private:
 	GLfloat maxx;
 	GLfloat minz;
 	GLfloat maxz;
+	string mlevelno;
+
 };
 #endif
