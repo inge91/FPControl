@@ -9,7 +9,7 @@ Room::Room()
     maxx = 150;
     minz = -150;
     maxz = 150;
-	mlevelno ="5";
+	mlevelno ="1";
 	update_level();
 }
 
@@ -238,8 +238,8 @@ bool Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<GLfloat, GLfloat>ne
 
 	GLfloat prevx = prev.first;
 	GLfloat prevz = prev.second;
-	GLfloat nextx = next.first;
-	GLfloat nextz = next.second;
+	GLfloat nextx = next.first+0.2;
+	GLfloat nextz = next.second+0.2;
 	pair <pair<GLfloat, GLfloat>, pair<GLfloat, GLfloat>>  p;
 	for (unsigned i=0; i<mcoordinates.size(); i++)
 	{
