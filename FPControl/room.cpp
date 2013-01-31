@@ -9,66 +9,18 @@ Room::Room()
     maxx = 150;
     minz = -150;
     maxz = 150;
-	mlevelno ="3";
+	mlevelno ="5";
 	update_level();
 }
 
 
 
+// Draw the room
 void Room::draw_level()
 {
-
-	/*
-	glEnable(GL_TEXTURE_2D);
-	//glEnable(GL_TEXTURE_2D);
-	glColor4f(1, 1,1, 0);
-    glBindTexture(GL_TEXTURE_2D, mwall);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0, 1);
-	glVertex3f(minx,miny, minz);
-	glTexCoord2f(0, 0);
-	glVertex3f(minx,maxy, minz);
-	glTexCoord2f(1, 0);
-	glVertex3f(minx,maxy, maxz);
-	glTexCoord2f(1, 1);
-	glVertex3f(minx,miny, maxz);
-
-	glTexCoord2f(0, 1);
-	glVertex3f(maxx,miny, minz);
-	glTexCoord2f(0, 0);
-	glVertex3f(maxx,maxy, minz);
-	glTexCoord2f(1, 0);
-	glVertex3f(maxx,maxy, maxz);
-	glTexCoord2f(1, 1);
-	glVertex3f(maxx,miny, maxz);
-
-	glTexCoord2f(0, 1);
-	glVertex3f(minx,miny, minz);
-	glTexCoord2f(0, 0);
-	glVertex3f(minx,maxy, minz);
-	glTexCoord2f(1, 0);
-	glVertex3f(maxx,maxy, minz);
-	glTexCoord2f(1, 1);
-	glVertex3f(maxx,miny, minz);
-
-	glTexCoord2f(0, 1);
-	glVertex3f(minx,miny, maxz);
-	glTexCoord2f(0, 0);
-	glVertex3f(minx,maxy, maxz);
-	glTexCoord2f(1, 0);
-	glVertex3f(maxx,maxy, maxz);
-	glTexCoord2f(1, 1);
-	glVertex3f(maxx,miny, maxz);
-	glEnd();
-	
-    //glBindTexture(GL_TEXTURE_2D, 0);
-	glDisable(GL_TEXTURE_2D);
-	*/
 	draw_walls();
 	draw_roof();
 	draw_floor();
-
-
 }
 
 // Draw the walls
@@ -274,4 +226,84 @@ void Room::update_level()
 
 }
 */
+}
+
+bool Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<GLfloat, GLfloat>next)
+{
+
+	GLfloat x1;
+	GLfloat z1;
+	GLfloat x2;
+	GLfloat z2;
+
+	GLfloat prevx = prev.first;
+	GLfloat prevz = prev.second;
+	GLfloat nextx = next.first;
+	GLfloat nextz = next.second;
+	pair <pair<GLfloat, GLfloat>, pair<GLfloat, GLfloat>>  p;
+	for (unsigned i=0; i<mcoordinates.size(); i++)
+	{
+		p = mcoordinates.at(i);
+		x1 = p.first.first;
+		z1 = p.first.second;
+		x2 = p.second.first;
+		z2 = p.second.second;
+		// Horizontal wall
+		if (z1 == z2)
+		{
+			// Sort on smallest
+			if(x1 < x2)
+			{
+				// If nextx is positioned next to wall see if y value changes
+				if( nextx >= x1 && nextx <= x2 )
+				{
+					if(prevz <= z1 && nextz > z1)
+						return true;
+					else if(prevz >= z1  && nextz < z1)
+						return true;
+				}
+			}
+			else{
+				// If nextx is positioned next to wall see if y value changes
+				if( nextx >= x2 && nextx <= x1 )
+				{
+					if(prevz <= z1 && nextz > z1)
+						return true;
+					else if(prevz >= z1  && nextz < z1)
+						return true;
+				}
+
+			}
+		}
+		if (x1 == x2)
+		{
+			// Sort on smallest
+			if(z1 < z2)
+			{
+				// If nextx is positioned next to wall see if y value changes
+				if( nextz >= z1 && nextz <= z2 )
+				{
+					if(prevx <= x1 && nextx > x1)
+						return true;
+					else if(prevx >= x1  && nextx < x1)
+						return true;
+				}
+			}
+			else{
+				// If nextx is positioned next to wall see if y value changes
+				if( nextz >= z2 && nextz <= z1 )
+				{
+					if(prevx <= x1 && nextx > x1)
+						return true;
+					else if(prevx >= x1  && nextx < x1)
+						return true;
+				}
+
+			}
+		}
+		// Vertical wall
+		
+	}
+	return false;
+
 }

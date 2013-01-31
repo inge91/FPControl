@@ -3,13 +3,7 @@ import sys
 import os
 
 
-def main():
-	# check for number of arguments
-	if len(sys.argv) ==1:
-		print "should give a file with!"
-		sys.exit()
-
-	filename = sys.argv[1]
+def convert(filename):
 
 	l = Image.open(filename)
 
@@ -34,7 +28,10 @@ def main():
 	# Loop through all the pixels
 	for i in range (0, x):
 		for j in range (0, y):
-			(r,g,b) = l.getpixel((j,i))		
+			if l.mode == "RGB":
+				(r,g,b) = l.getpixel((j,i))
+			else:
+				(r, _, _, _) = l.getpixel((j,i))
 			# In case of non-black pixel
 			if r > 0:
 				filed.write("1 ")
@@ -42,7 +39,10 @@ def main():
 			else:
 				# Find value of next pixel
 				if j != x-1:
-					r2, _, _ = l.getpixel((j+1, i))
+					if l.mode == "RGB":
+						(r2,g,b) = l.getpixel((j+1,i))
+					else:
+						(r2, _, _, _) = l.getpixel((j+1,i))
 				# if no next pixel just set it to white
 				else:
 					r2 = 99
@@ -69,7 +69,11 @@ def main():
 	# Loop through the pixels in vertical direction
 	for i in range (0, x):
 		for j in range (0, y):
-			(r,g,b) = l.getpixel((i,j))		
+			if l.mode == "RGB":
+				(r,g,b) = l.getpixel((i,j))		
+			else:
+				(r,g,b, _) = l.getpixel((i,j))		
+
 			# In case of non-black pixel
 			if x == 0:
 				print i,
@@ -81,7 +85,10 @@ def main():
 			else:
 				# Find value of next pixel
 				if j != y-1:
-					r2, _, _ = l.getpixel((i, j+1))
+					if l.mode == "RGB":
+						(r2,_,_) = l.getpixel((i,j+1))		
+					else:
+						(r2,_,_, _) = l.getpixel((i,j+1))		
 				# if no next pixel just set it to white
 				else:
 					print "There is no next element"
@@ -110,5 +117,3 @@ def main():
 
 
 
-if __name__ == "__main__":
-	main();
