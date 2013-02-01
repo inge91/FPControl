@@ -3,8 +3,6 @@
 #include "main.h"
 
 
-
-
 using namespace std;
 GLuint LoadTextureRAW( const char * filename, int wrap, int w, int h );
 GLuint raw_texture_load(const char *filename, int width, int height);
@@ -523,9 +521,10 @@ void init_sound_engine()
 
 
 	//load sounds
-	//sys->createSound("night.mp3", FMOD_HARDWARE, 0, &sound1);
+	sys->createSound("night.mp3", FMOD_HARDWARE, 0, &sound1);
 										/* so turn it off here.  We could have also just put FMOD_LOOP_OFF in the above CreateSound call. */
    
+	sound1->setLoopCount(100);
 	
     glEnable(GL_DEPTH_TEST); // check for depth
     
@@ -534,11 +533,30 @@ void init_sound_engine()
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	glutInitWindowSize(800, 600);
-	glutCreateWindow("FPS");
 
+
+
+glutGameModeGet(GLUT_GAME_MODE_POSSIBLE);
+	if(GLUT_GAME_MODE_POSSIBLE && 0)
+	{
+		glutEnterGameMode(); 
+	}
+	else
+	{
+			RECT desktop;
+		   // Get a handle to the desktop window
+		   const HWND hDesktop = GetDesktopWindow();
+		   // Get the size of screen to the variable desktop
+		   GetWindowRect(hDesktop, &desktop);
+		   float width = desktop.right;
+		   float height = desktop.bottom-65;
+			glutInitWindowSize(desktop.right, desktop.bottom-55);
+		glutInitWindowPosition (0,0);
+		glutCreateWindow("FPS");
+	}
 
 	init_sound_engine();
+
 	sys->playSound(FMOD_CHANNEL_FREE, sound1, false, 0);
 	//glutFullScreen();
 	initRendering();

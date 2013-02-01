@@ -98,9 +98,9 @@ void Player::draw_player()
 
 	}
 	else{
-		if(mpositiony >= -14)
+		if(mpositiony <= -12)
 		{
-			mpositiony -= 0.15;
+			mpositiony += 0.15;
 		}
 	}
 
