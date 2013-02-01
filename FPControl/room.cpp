@@ -10,7 +10,7 @@ Room::Room(Player *p)
     maxx = 150;
     minz = -150;
     maxz = 150;
-	mlevelno ="5";
+	mlevelno ="6";
 	update_level();
 }
 
@@ -239,12 +239,15 @@ pair <GLfloat, GLfloat> Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<
 	GLfloat prevz = prev.second;
 	GLfloat nextx = next.first;
 	GLfloat nextz = next.second;
-	std::cout<<"\n"<<endl;
-	std::cout<<"nextx"<<endl;
-	std::cout<<nextx<<endl;
-	std::cout<<"nextz"<<endl;
-	std::cout<<nextz<<endl;
 	
+	if(prevx!= nextx || prevz!= nextz)
+	{
+		std::cout<<"\n"<<endl;
+		std::cout<<"-nextx"<<endl;
+		std::cout<<-nextx<<endl;
+		std::cout<<"-nextz"<<endl;
+		std::cout<<-nextz<<endl;
+	}
 
 	pair <pair<GLfloat, GLfloat>, pair<GLfloat, GLfloat>>  p;
 	for (unsigned i=0; i<mcoordinates.size(); i++)
@@ -254,47 +257,55 @@ pair <GLfloat, GLfloat> Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<
 		z1 = p.first.second;
 		x2 = p.second.first;
 		z2 = p.second.second;
-		//std::cout<<"walls"<<endl;
-		//std::cout<<x1<< ","<<z1<< " " <<x2<<","<<z2<<endl;
+
+	if(prevx!= nextx || prevz!= nextz)
+	{
+		std::cout<<"walls"<<endl;
+		std::cout<<x1<< ","<<z1<< " " <<x2<<","<<z2<<endl;
+	}
 		// Horizontal wall
 		if (z1 == z2)
 		{
 			// Sort on smallest
 			if(x1 < x2)
 			{
+				
 				// If nextx is positioned next to wall see if y value changes
 				if( -nextx >= x1 && -nextx <= x2 )
 				{
-					if(-prevz <  z1 && -nextz > z1)
+
+					z1 = z1 - 2;
+					z2 = z2 + 2;
+
+					if(prevx!= nextx || prevz!= nextz)
 					{
-						std::cout<<"here1"<<std::endl; 
-						next.second = prevz + 0.125;
+						std::cout<<"new z1 z2"<<endl;
+						std::cout<<z1<< ","<<z2<<endl;
+					}
+					if(-nextz >z1 && -nextz < z2 )
+					{
+						if(abs(abs(-nextz) - abs(z1)) <  abs(abs(-nextz) - abs(z2)))
+						{
+							next.second = prevz - 0.3;
+						}
+						else{
+							next.second = prevz + 0.3;
+						}
 						return next;
 					}
-					else if(-prevz > z1  && -nextz < z1)
-					{
-						std::cout<<"here2"<<std::endl; 
-						next.second = prevz - 0.125;
-						return next;
-					}
+					
 				}
 			}
 			else{
 				// If nextx is positioned next to wall see if y value changes
 				if( -nextx >= x2 && -nextx <= x1 )
 				{
-					if(-prevz < z1 && -nextz > z1)
-
+			
+					z1 = z1 -2;
+					z2 = z2 + 2;
+					if(-nextz >z1 && -nextz < z2 )
 					{
-						std::cout<<"here3"<<std::endl; 
-						next.second = prevz + 0.125;
-						return next;
-						
-					}
-					else if(-prevz > z1  && -nextz < z1)
-					{
-						std::cout<<"here4"<<std::endl; 
-						next.second = prevz - 0.125;
+						next.second = prevz + 0.3;
 						return next;
 					}
 				}
