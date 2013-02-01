@@ -277,11 +277,7 @@ pair <GLfloat, GLfloat> Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<
 					z1 = z1 - 3;
 					z2 = z2 + 3;
 
-					if(prevx!= nextx || prevz!= nextz)
-					{
-						std::cout<<"new z1 z2"<<endl;
-						std::cout<<z1<< ","<<z2<<endl;
-					}
+					
 					if(-nextz >z1 && -nextz < z2 )
 					{
 						if(abs(abs(-nextz) - abs(z1)) <  abs(abs(-nextz) - abs(z2)))
@@ -306,16 +302,14 @@ pair <GLfloat, GLfloat> Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<
 					if(-nextz >z1 && -nextz < z2 )
 					{
 						
-			if(abs(abs(-nextz) - abs(z1)) <  abs(abs(-nextz) - abs(z2)))
-						{
-							next.second = prevz ;
-						}
-						else{
-							next.second = prevz ;
-						}
-						return next;
-
-
+						if(abs(abs(-nextz) - abs(z1)) <  abs(abs(-nextz) - abs(z2)))
+							{
+								next.second = prevz ;
+							}
+							else{
+								next.second = prevz ;
+							}
+							return next;
 
 					}
 				}
@@ -330,16 +324,24 @@ pair <GLfloat, GLfloat> Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<
 				// If nextx is positioned next to wall see if y value changes
 				if( -nextz >= z1 && -nextz <= z2 )
 				{
-					if(-prevx < x1 && -nextx > x1)
+
+					x1 = x1 - 3;
+					x2 = x2 + 3;
+					if(prevx!= nextx || prevz!= nextz)
 					{
-						std::cout<<"here5"<<std::endl; 
-						next.first = prevx +0.125;
-						return next;
+						std::cout<<"new x1 x2"<<endl;
+						std::cout<<x1<< ","<<x2<<endl;
 					}
-					else if(-prevx > x1  && -nextx < x1)
+					
+					if(-nextx >x1 && -nextx < x2 )
 					{
-						std::cout<<"here6"<<std::endl; 
-						next.first = prevx - 0.125;
+						if(abs(abs(-nextx) - abs(x1)) <  abs(abs(-nextx) - abs(x2)))
+						{
+							next.first = prevx ;
+						}
+						else{
+							next.first = prevx ;
+						}
 						return next;
 					}
 				}
@@ -348,18 +350,22 @@ pair <GLfloat, GLfloat> Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<
 				// If nextx is positioned next to wall see if y value changes
 				if( -nextz >= z2 && -nextz <= z1 )
 				{
-					if(-prevx < x1 && -nextx > x1)
+				
+					x1 = x1 - 3;
+					x2 = x2 + 3;
+					
+					if(-nextx >x1 && -nextx < x2 )
 					{
-						std::cout<<"here7"<<std::endl; 
-						next.first = prevx + 0.025;
+						if(abs(abs(-nextx) - abs(x1)) <  abs(abs(-nextx) - abs(x2)))
+						{
+							next.second = prevx ;
+						}
+						else{
+							next.second = prevx ;
+						}
 						return next;
 					}
-					else if(-prevx > x1  && -nextx < x1)
-					{
-						std::cout<<"here8"<<std::endl; 
-						next.first = prevx -0.125;
-						return next;
-					}
+
 
 				}
 
