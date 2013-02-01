@@ -10,7 +10,7 @@ Room::Room(Player *p)
     maxx = 150;
     minz = -150;
     maxz = 150;
-	mlevelno ="5";
+	mlevelno ="10";
 	update_level();
 }
 
@@ -41,20 +41,55 @@ void Room::draw_walls()
 		y1 = p.first.second;
 		x2 = p.second.first;
 		y2 = p.second.second;
-		glEnable(GL_TEXTURE_2D);
-		//glEnable(GL_TEXTURE_2D);
-		glColor4f(1, 1,1, 0);
-		glBindTexture(GL_TEXTURE_2D, mwall);
-		glBegin(GL_QUADS);
-		glTexCoord2f(0, 1);
-		glVertex3f(x1,miny, y1);
-		glTexCoord2f(0, 0);
-		glVertex3f(x1,maxy, y1);
-		glTexCoord2f(1, 0);
-		glVertex3f(x2,maxy, y2);
-		glTexCoord2f(1, 1);
-		glVertex3f(x2,miny, y2);
-		glEnd();
+		//std::cout<<"x1,y1 x2,y2"<<endl;
+		//std::cout<<x1 << ","<<y1<<" "<<x2 <<"," <<y2<<endl;
+
+
+	if (x1 == x2)
+		{
+			GLfloat size = abs(y2- y1);
+			GLfloat repeat = size/90;
+			
+			//std::cout<< y2<<","<<y1<< endl;
+			//std::cout<< size<<endl;
+			glEnable(GL_TEXTURE_2D);
+			//glEnable(GL_TEXTURE_2D);
+			glColor4f(1, 1,1, 0);
+			glBindTexture(GL_TEXTURE_2D, mwall);
+			glBegin(GL_QUADS);
+			glTexCoord2f(0, 1);
+			glVertex3f(x1,miny, y1);
+			glTexCoord2f(0, 0);
+			glVertex3f(x1,maxy, y1);
+			glTexCoord2f(repeat, 0);
+			glVertex3f(x2,maxy, y2);
+			glTexCoord2f(repeat, 1);
+			glVertex3f(x2,miny, y2);
+			glEnd();
+		}
+		else{
+			glEnable(GL_TEXTURE_2D);
+			//glEnable(GL_TEXTURE_2D);
+			glColor4f(1, 1,1, 0);
+			glBindTexture(GL_TEXTURE_2D, mwall);
+			glBegin(GL_QUADS);
+
+			GLfloat size = abs(x2- x1);
+			GLfloat repeat = size/90;
+			
+			//std::cout<< x2<<","<<x1<< endl;
+			//std::cout<< size<<endl;
+			glTexCoord2f(0, 1);
+			glVertex3f(x1,miny, y1);
+			glTexCoord2f(0, 0);
+			glVertex3f(x1,maxy, y1);
+			glTexCoord2f(repeat, 0);
+			glVertex3f(x2,maxy, y2);
+			glTexCoord2f(repeat, 1);
+			glVertex3f(x2,miny, y2);
+			glEnd();
+
+		}
 		
 	}
 }
@@ -101,13 +136,13 @@ void Room::draw_floor()
 	glBegin(GL_QUADS);
 	glColor4f(1,1,1, 0);
 	glTexCoord2f(0, 0);
-	glVertex3f(minx, miny, minz);
-	glTexCoord2f(8, 0);
-	glVertex3f(maxx, miny, minz);
-	glTexCoord2f(8, 8);
-	glVertex3f(maxx, miny, maxz);
-	glTexCoord2f(0, 8);
-	glVertex3f(minx, miny, maxz);
+	glVertex3f(minx * 10, miny, minz * 10);
+	glTexCoord2f(80, 0);
+	glVertex3f(maxx * 10, miny, minz * 10);
+	glTexCoord2f(80, 80);
+	glVertex3f(maxx * 10, miny, maxz * 10);
+	glTexCoord2f(0, 80);
+	glVertex3f(minx * 10, miny, maxz * 10);
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
 
@@ -240,13 +275,13 @@ pair <GLfloat, GLfloat> Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<
 	GLfloat nextx = next.first;
 	GLfloat nextz = next.second;
 	
-	if(prevx!= nextx || prevz!= nextz)
+	if(prevx!= nextx || prevz!= nextz )
 	{
-		std::cout<<"\n"<<endl;
-		std::cout<<"-nextx"<<endl;
-		std::cout<<-nextx<<endl;
-		std::cout<<"-nextz"<<endl;
-		std::cout<<-nextz<<endl;
+	//	std::cout<<"\n"<<endl;
+	//	std::cout<<"-nextx"<<endl;
+	//	std::cout<<-nextx<<endl;
+	//	std::cout<<"-nextz"<<endl;
+	//	std::cout<<-nextz<<endl;
 	}
 
 	pair <pair<GLfloat, GLfloat>, pair<GLfloat, GLfloat>>  p;
@@ -261,7 +296,7 @@ pair <GLfloat, GLfloat> Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<
 	if(prevx!= nextx || prevz!= nextz)
 	{
 		//std::cout<<"walls"<<endl;
-		//std::cout<<x1<< ","<<z1<< " " <<x2<<","<<z2<<endl;
+	//	std::cout<<x1<< ","<<z1<< " " <<x2<<","<<z2<<endl;
 	}
 		// Horizontal wall
 		if (z1 == z2)
@@ -269,13 +304,12 @@ pair <GLfloat, GLfloat> Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<
 			// Sort on smallest
 			if(x1 < x2)
 			{
-				
 				// If nextx is positioned next to wall see if y value changes
 				if( -nextx >= x1 && -nextx <= x2 )
 				{
 
-					z1 = z1 - 3;
-					z2 = z2 + 3;
+					z1 = z1 - 4;
+					z2 = z2 + 4;
 
 					
 					if(-nextz >z1 && -nextz < z2 )
@@ -287,7 +321,6 @@ pair <GLfloat, GLfloat> Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<
 						else{
 							next.second = prevz ;
 						}
-						return next;
 					}
 					
 				}
@@ -297,8 +330,8 @@ pair <GLfloat, GLfloat> Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<
 				if( -nextx >= x2 && -nextx <= x1 )
 				{
 			
-					z1 = z1 -3;
-					z2 = z2 + 3;
+					z1 = z1 -4;
+					z2 = z2 + 4;
 					if(-nextz >z1 && -nextz < z2 )
 					{
 						
@@ -309,7 +342,6 @@ pair <GLfloat, GLfloat> Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<
 							else{
 								next.second = prevz ;
 							}
-							return next;
 
 					}
 				}
@@ -325,12 +357,13 @@ pair <GLfloat, GLfloat> Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<
 				if( -nextz >= z1 && -nextz <= z2 )
 				{
 
-					x1 = x1 - 3;
-					x2 = x2 + 3;
-					if(prevx!= nextx || prevz!= nextz)
+					x1 = x1 - 4;
+					x2 = x2 + 4;
+
+					if(prevx!= nextx || prevz!= nextz && 0)
 					{
-						std::cout<<"new x1 x2"<<endl;
-						std::cout<<x1<< ","<<x2<<endl;
+						//std::cout<<"new x1 x2"<<endl;
+						//std::cout<<x1<< ","<<x2<<endl;
 					}
 					
 					if(-nextx >x1 && -nextx < x2 )
@@ -342,17 +375,17 @@ pair <GLfloat, GLfloat> Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<
 						else{
 							next.first = prevx ;
 						}
-						return next;
 					}
 				}
 			}
 			else{
+
 				// If nextx is positioned next to wall see if y value changes
 				if( -nextz >= z2 && -nextz <= z1 )
 				{
 				
-					x1 = x1 - 3;
-					x2 = x2 + 3;
+					x1 = x1 - 4;
+					x2 = x2 + 4;
 					
 					if(-nextx >x1 && -nextx < x2 )
 					{
@@ -363,7 +396,6 @@ pair <GLfloat, GLfloat> Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<
 						else{
 							next.second = prevx ;
 						}
-						return next;
 					}
 
 
