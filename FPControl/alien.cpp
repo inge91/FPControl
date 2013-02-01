@@ -8,6 +8,8 @@ Alien::Alien( GLfloat camerax, GLfloat cameraz)
 	mspeed = 0.4;
 	// Set the degrees
 	calculate_degrees(camerax, cameraz); 
+
+
 }
 
 

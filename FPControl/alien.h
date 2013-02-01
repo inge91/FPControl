@@ -10,6 +10,7 @@
 #include <vector>
 #include <cmath>
 #include "main.h"
+//#include "main.h"
 using namespace std;
 class Alien
 {

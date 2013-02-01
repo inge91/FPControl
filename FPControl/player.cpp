@@ -12,6 +12,25 @@ Player::Player()
 
 	// set value of dirz and mdirx
 	calculate_direction();
+	initiate_sounds();
+}
+
+void  Player::initiate_sounds()
+{
+	//init FMOD
+	FMOD::System_Create(&msys);// create an instance of the game engine
+	msys->init(32, FMOD_INIT_NORMAL, 0);// initialise the game engine with 32 channels
+
+
+	//load sounds
+	msys->createSound("walk5.mp3", FMOD_HARDWARE, 0, &mwalk1);
+	mwalk1->setMode(FMOD_LOOP_OFF);
+	msys->createSound("walk6.mp3", FMOD_HARDWARE, 0, &mwalk2);
+	mwalk1->setMode(FMOD_LOOP_OFF);
+	
+    glEnable(GL_DEPTH_TEST); // check for depth
+    
+
 }
 
 GLfloat prevx = 0;
@@ -57,10 +76,10 @@ void Player::draw_player()
 
 			if(first)
 			{
-				PlaySound(L"walk1.wav", NULL, SND_ASYNC|SND_FILENAME);
+				msys->playSound(FMOD_CHANNEL_FREE, mwalk1, false, 0);
 				first = false;
 			}
-			else{				PlaySound(L"walk2.wav", NULL, SND_ASYNC|SND_FILENAME);
+			else{				//msys->playSound(FMOD_CHANNEL_FREE, mwalk2, false, 0);
 				first = true;
 
 			}

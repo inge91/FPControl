@@ -7,6 +7,8 @@
 #include <iostream>
 #include <windows.h> 
 #include <mmsystem.h>
+#include "fmod.hpp" //fmod c++ header
+#pragma comment( lib, "fmodex_vc.lib" ) // fmod library
 using namespace std;
 class Player{
 
@@ -26,6 +28,11 @@ public:
 	void draw_player();
 	void calculate_direction_horizontal();
 	void calculate_direction();
+
+	void initiate_sounds();
+	FMOD::System     *msys; //handle to FMOD engine
+	FMOD::Sound      *mwalk1; //sound that will be loaded and played
+	FMOD::Sound      *mwalk2; //sound that will be loaded and played
 
 };
 

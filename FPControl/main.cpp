@@ -4,6 +4,7 @@
 
 
 
+
 using namespace std;
 GLuint LoadTextureRAW( const char * filename, int wrap, int w, int h );
 GLuint raw_texture_load(const char *filename, int width, int height);
@@ -18,6 +19,8 @@ GLfloat weight = 1.5;
 
 Player p = Player();
 Room r = Room(&p);
+FMOD::System     *sys; //handle to FMOD engine
+FMOD::Sound      *sound1; //sound that will be loaded and played
 
 
 void key_down_func(unsigned char key, int x, int y) {
@@ -210,6 +213,7 @@ void drawScene() {
 
 	r.draw_level();
 
+	sys->update();
 	/*
 	GLfloat maxy = 50;
 	GLfloat miny = -20;
@@ -511,12 +515,31 @@ GLuint GetTexture(std::string Filename)
 			return 0;
 }
 
+void init_sound_engine()
+{
+	//init FMOD
+	FMOD::System_Create(&sys);// create an instance of the game engine
+	sys->init(32, FMOD_INIT_NORMAL, 0);// initialise the game engine with 32 channels
+
+
+	//load sounds
+	sys->createSound("night.mp3", FMOD_HARDWARE, 0, &sound1);
+										/* so turn it off here.  We could have also just put FMOD_LOOP_OFF in the above CreateSound call. */
+   
+	
+    glEnable(GL_DEPTH_TEST); // check for depth
+    
+}
+
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowSize(800, 600);
 	glutCreateWindow("FPS");
-	PlaySound(L"darkbackground.wav", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP|SND_NOSTOP);
+
+
+	init_sound_engine();
+	sys->playSound(FMOD_CHANNEL_FREE, sound1, false, 0);
 	//glutFullScreen();
 	initRendering();
 
