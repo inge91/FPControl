@@ -10,7 +10,7 @@ Room::Room(Player *p)
     maxx = 150;
     minz = -150;
     maxz = 150;
-	mlevelno ="6";
+	mlevelno ="5";
 	update_level();
 }
 
@@ -260,8 +260,8 @@ pair <GLfloat, GLfloat> Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<
 
 	if(prevx!= nextx || prevz!= nextz)
 	{
-		std::cout<<"walls"<<endl;
-		std::cout<<x1<< ","<<z1<< " " <<x2<<","<<z2<<endl;
+		//std::cout<<"walls"<<endl;
+		//std::cout<<x1<< ","<<z1<< " " <<x2<<","<<z2<<endl;
 	}
 		// Horizontal wall
 		if (z1 == z2)
@@ -274,8 +274,8 @@ pair <GLfloat, GLfloat> Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<
 				if( -nextx >= x1 && -nextx <= x2 )
 				{
 
-					z1 = z1 - 2;
-					z2 = z2 + 2;
+					z1 = z1 - 3;
+					z2 = z2 + 3;
 
 					if(prevx!= nextx || prevz!= nextz)
 					{
@@ -286,10 +286,10 @@ pair <GLfloat, GLfloat> Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<
 					{
 						if(abs(abs(-nextz) - abs(z1)) <  abs(abs(-nextz) - abs(z2)))
 						{
-							next.second = prevz - 0.3;
+							next.second = prevz ;
 						}
 						else{
-							next.second = prevz + 0.3;
+							next.second = prevz ;
 						}
 						return next;
 					}
@@ -301,12 +301,22 @@ pair <GLfloat, GLfloat> Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<
 				if( -nextx >= x2 && -nextx <= x1 )
 				{
 			
-					z1 = z1 -2;
-					z2 = z2 + 2;
+					z1 = z1 -3;
+					z2 = z2 + 3;
 					if(-nextz >z1 && -nextz < z2 )
 					{
-						next.second = prevz + 0.3;
+						
+			if(abs(abs(-nextz) - abs(z1)) <  abs(abs(-nextz) - abs(z2)))
+						{
+							next.second = prevz ;
+						}
+						else{
+							next.second = prevz ;
+						}
 						return next;
+
+
+
 					}
 				}
 

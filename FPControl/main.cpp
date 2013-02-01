@@ -523,7 +523,7 @@ void init_sound_engine()
 
 
 	//load sounds
-	sys->createSound("night.mp3", FMOD_HARDWARE, 0, &sound1);
+	//sys->createSound("night.mp3", FMOD_HARDWARE, 0, &sound1);
 										/* so turn it off here.  We could have also just put FMOD_LOOP_OFF in the above CreateSound call. */
    
 	
