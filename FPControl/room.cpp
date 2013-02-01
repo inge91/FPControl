@@ -10,7 +10,7 @@ Room::Room(Player *p)
     maxx = 150;
     minz = -150;
     maxz = 150;
-	mlevelno ="10";
+	mlevelno ="12";
 	update_level();
 }
 
