@@ -11,11 +11,12 @@
 #include <cmath>
 #include <fstream>
 #include "main.h"
+#include "player.h"
 using namespace std;
 class Room
 {
 public:
-	Room();
+	Room(Player *p);
 	// keeps track of the coordinates that make the building
 	vector<pair<pair<GLfloat, GLfloat>, pair<GLfloat, GLfloat>>> mcoordinates;
 	void draw_level();
@@ -41,6 +42,7 @@ private:
 	GLfloat minz;
 	GLfloat maxz;
 	string mlevelno;
+	Player *mp;
 
 };
 #endif

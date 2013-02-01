@@ -14,9 +14,10 @@ bool w = false;
 bool s = false;
 bool q = false;
 bool e = false;
+GLfloat weight = 1.5;
 
 Player p = Player();
-Room r = Room();
+Room r = Room(&p);
 
 
 void key_down_func(unsigned char key, int x, int y) {
@@ -40,32 +41,20 @@ void key_down_func(unsigned char key, int x, int y) {
 	case 119:
 		w = true;
 		p.calculate_direction();
-		tempx = p.mpositionx - (p.mdirx);
-		tempz = p.mpositionz + (p.mdirz);
-
-		pprev.first = p.mpositionx;
-		pprev.second = p.mpositionz;
-		pnext.first = tempx;
-		pnext.second = tempz;
-		temp = r.detect_collision(pprev, pnext);
-		p.mpositionx = temp.first;
-		p.mpositionz = temp.second;
+		tempx = p.mpositionx - (p.mdirx) * weight;
+		tempz = p.mpositionz + (p.mdirz) * weight;
+		p.mpositionx = tempx;
+		p.mpositionz = tempz;
 
 		break;
 	// s-key
 	case 115:
 		s = true;
 		p.calculate_direction();
-		tempx = p.mpositionx + (p.mdirx);
-		tempz = p.mpositionz - (p.mdirz);
-
-		pprev.first = p.mpositionx;
-		pprev.second = p.mpositionz;
-		pnext.first = tempx;
-		pnext.second = tempz;
-		temp = r.detect_collision(pprev, pnext);
-		p.mpositionx = temp.first;
-		p.mpositionz = temp.second;
+		tempx = p.mpositionx + (p.mdirx) * weight;
+		tempz = p.mpositionz - (p.mdirz) * weight;
+		p.mpositionx = tempx;
+		p.mpositionz = tempz;
 	
 		
 		break;
@@ -75,15 +64,10 @@ void key_down_func(unsigned char key, int x, int y) {
 		q = true;
 		p.calculate_direction_horizontal();
 		
-		tempx = p.mpositionx + (p.mdirz);
-		tempz = p.mpositionz - (p.mdirx);
-		pprev.first = p.mpositionx;
-		pprev.second = p.mpositionz;
-		pnext.first = tempx;
-		pnext.second = tempz;
-		temp = r.detect_collision(pprev, pnext);
-		p.mpositionx = temp.first;
-		p.mpositionz = temp.second;
+		tempx = p.mpositionx + (p.mdirz) * weight;
+		tempz = p.mpositionz - (p.mdirx) * weight;
+		p.mpositionx = tempx;
+		p.mpositionz = tempz;
 	
 
 		break;
@@ -91,15 +75,10 @@ void key_down_func(unsigned char key, int x, int y) {
 		e = true;
 		//p.mpositionz = p.mpositionx - (p.mdirx);
 		p.calculate_direction_horizontal();
-		tempx = p.mpositionx - (p.mdirz);
-		tempz = p.mpositionz + (p.mdirx);
-		pprev.first = p.mpositionx;
-		pprev.second = p.mpositionz;
-		pnext.first = tempx;
-		pnext.second = tempz;
-		temp = r.detect_collision(pprev, pnext);
-		p.mpositionx = temp.first;
-		p.mpositionz = temp.second;
+		tempx = p.mpositionx - (p.mdirz) * weight;
+		tempz = p.mpositionz + (p.mdirx) * weight;
+		p.mpositionx = tempx;
+		p.mpositionz = tempz;
 	
 
 		break;
@@ -130,59 +109,38 @@ void key_up_func(unsigned char key, int x, int y) {
 	case 119:
 		w = false;
 	p.calculate_direction();
-		tempx = p.mpositionx - (p.mdirx);
-		tempz = p.mpositionz + (p.mdirz);
-		pprev.first = p.mpositionx;
-		pprev.second = p.mpositionz;
-		pnext.first = tempx;
-		pnext.second = tempz;
-	temp = r.detect_collision(pprev, pnext);
-		p.mpositionx = temp.first;
-		p.mpositionz = temp.second;
+		tempx = p.mpositionx - (p.mdirx) * weight;
+		tempz = p.mpositionz + (p.mdirz) * weight;
+		p.mpositionx = tempx;
+		p.mpositionz = tempz;
 		break;
 	// s-key
 	case 115:
 		s = false;
 	p.calculate_direction();
-		tempx = p.mpositionx + (p.mdirx);
-		tempz = p.mpositionz - (p.mdirz);
-		pprev.first = p.mpositionx;
-		pprev.second = p.mpositionz;
-		pnext.first = tempx;
-		pnext.second = tempz;
-	temp = r.detect_collision(pprev, pnext);
-		p.mpositionx = temp.first;
-		p.mpositionz = temp.second;
+		tempx = p.mpositionx + (p.mdirx) * weight;
+		tempz = p.mpositionz - (p.mdirz) * weight;
+		p.mpositionx = tempx;
+		p.mpositionz = tempz;
 		break;
 	// q-key
 	case 113:
 		q = false;
 		p.calculate_direction_horizontal();
-		tempx = p.mpositionx + (p.mdirz);
-		tempz = p.mpositionz - (p.mdirx);
-		pprev.first = p.mpositionx;
-		pprev.second = p.mpositionz;
-		pnext.first = tempx;
-		pnext.second = tempz;
-			temp = r.detect_collision(pprev, pnext);
-		p.mpositionx = temp.first;
-		p.mpositionz = temp.second;
+		tempx = p.mpositionx + (p.mdirz) * weight;
+		tempz = p.mpositionz - (p.mdirx) * weight;
+		p.mpositionx = tempx;
+		p.mpositionz = tempz;
 		break;
 	case 'e':
 		e = false;
 		//p.mpositionz = p.mpositionx - (p.mdirx);
 		p.calculate_direction_horizontal();
-		tempx = p.mpositionx - (p.mdirz);
-		tempz = p.mpositionz + (p.mdirx);
+		tempx = p.mpositionx - (p.mdirz) * weight;
+		tempz = p.mpositionz + (p.mdirx) * weight;
 
-		pprev.first = p.mpositionx;
-		pprev.second = p.mpositionz;
-		pnext.first = tempx;
-		pnext.second = tempz;
-
-		temp = r.detect_collision(pprev, pnext);
-		p.mpositionx = temp.first;
-		p.mpositionz = temp.second;
+		p.mpositionx = tempx;
+		p.mpositionz = tempz;
 		break;
 	case 27: //Escape key
 			exit(0);
@@ -237,6 +195,15 @@ void drawScene() {
 	gluPerspective( 60, 1, 0.1, 1000.0 );
 
 
+	pair <GLfloat, GLfloat> pprev;
+	pair <GLfloat, GLfloat> pnext;
+	pprev.first = p.mprevx;
+	pprev.second = p.mprevz;
+	pnext.first = p.mpositionx; 
+	pnext.second = p.mpositionz;
+	pair <GLfloat, GLfloat> temp = r.detect_collision(pprev, pnext);
+	p.mpositionx = temp.first;
+	p.mpositionz = temp.second;
 
 	p.draw_player();
 
@@ -375,26 +342,20 @@ void update(int value) {
 		if(q||e){
 		
 
-	GLfloat tempx = p.mpositionx - (p.mdirx/2);
-		GLfloat tempz = p.mpositionz + (p.mdirz/2);
-		pair <GLfloat, GLfloat> pprev (p.mpositionx, p.mpositionz);
-		pair <GLfloat, GLfloat> pnext (tempx, tempz);
-		pair <GLfloat, GLfloat> temp = r.detect_collision(pprev, pnext);
-		p.mpositionx = temp.first;
-		p.mpositionz = temp.second;
+		GLfloat tempx = p.mpositionx - (p.mdirx/2) * weight;
+		GLfloat tempz = p.mpositionz + (p.mdirz/2) * weight;
+		p.mpositionx = tempx;
+		p.mpositionz = tempz;
 
 
 		}
 		else{
 
 
-	GLfloat tempx = p.mpositionx - (p.mdirx);
-		GLfloat tempz = p.mpositionz + (p.mdirz);
-		pair <GLfloat, GLfloat> pprev (p.mpositionx, p.mpositionz);
-		pair <GLfloat, GLfloat> pnext (tempx, tempz);
-	pair <GLfloat, GLfloat> temp = r.detect_collision(pprev, pnext);
-		p.mpositionx = temp.first;
-		p.mpositionz = temp.second;
+		GLfloat tempx = p.mpositionx - (p.mdirx) * weight;
+		GLfloat tempz = p.mpositionz + (p.mdirz) * weight;
+		p.mpositionx = tempx;
+		p.mpositionz = tempz;
 
 
 		}
@@ -403,26 +364,20 @@ void update(int value) {
 	p.calculate_direction();
 		if(q||e){
 		
-		GLfloat tempx = p.mpositionx + (p.mdirx/2);
-		GLfloat tempz = p.mpositionz - (p.mdirz/2);
-		pair <GLfloat, GLfloat> pprev (p.mpositionx, p.mpositionz);
-		pair <GLfloat, GLfloat> pnext (tempx, tempz);
-		pair <GLfloat, GLfloat> temp = r.detect_collision(pprev, pnext);
-		p.mpositionx = temp.first;
-		p.mpositionz = temp.second;
+		GLfloat tempx = p.mpositionx + (p.mdirx/2) * weight;
+		GLfloat tempz = p.mpositionz - (p.mdirz/2) * weight;
+		p.mpositionx = tempx;
+		p.mpositionz = tempz;
 
 
 		}
 		else{
 
 
-		GLfloat tempx = p.mpositionx + (p.mdirx);
-		GLfloat tempz = p.mpositionz - (p.mdirz);
-		pair <GLfloat, GLfloat> pprev (p.mpositionx, p.mpositionz);
-		pair <GLfloat, GLfloat> pnext (tempx, tempz);
-		pair <GLfloat, GLfloat> temp = r.detect_collision(pprev, pnext);
-		p.mpositionx = temp.first;
-		p.mpositionz = temp.second;
+		GLfloat tempx = p.mpositionx + (p.mdirx) * weight;
+		GLfloat tempz = p.mpositionz - (p.mdirz) * weight;
+		p.mpositionx = tempx;
+		p.mpositionz = tempz;
 
 
 		}
@@ -434,26 +389,20 @@ void update(int value) {
 		{
 
 
-		GLfloat tempx = p.mpositionx + (p.mdirz/2);
-		GLfloat tempz = p.mpositionz - (p.mdirx/2);
-		pair <GLfloat, GLfloat> pprev (p.mpositionx, p.mpositionz);
-		pair <GLfloat, GLfloat> pnext (tempx, tempz);
-		pair <GLfloat, GLfloat> temp = r.detect_collision(pprev, pnext);
-		p.mpositionx = temp.first;
-		p.mpositionz = temp.second;
+		GLfloat tempx = p.mpositionx + (p.mdirz/2) * weight;
+		GLfloat tempz = p.mpositionz - (p.mdirx/2) * weight;
+		p.mpositionx = tempx;
+		p.mpositionz = tempz;
 
 
 		}
 		else{
 
 
-	GLfloat tempx = p.mpositionx + (p.mdirz);
-		GLfloat tempz = p.mpositionz - (p.mdirx);
-		pair <GLfloat, GLfloat> pprev (p.mpositionx, p.mpositionz);
-		pair <GLfloat, GLfloat> pnext (tempx, tempz);
-		pair <GLfloat, GLfloat> temp = r.detect_collision(pprev, pnext);
-		p.mpositionx = temp.first;
-		p.mpositionz = temp.second;
+		GLfloat tempx = p.mpositionx + (p.mdirz) * weight;
+		GLfloat tempz = p.mpositionz - (p.mdirx) * weight;
+		p.mpositionx = tempx;
+		p.mpositionz = tempz;
 
 
 
@@ -466,23 +415,17 @@ void update(int value) {
 		p.calculate_direction_horizontal();
 		if(w||s)
 		{
-		GLfloat tempx = p.mpositionx - (p.mdirz/2);
-		GLfloat tempz = p.mpositionz + (p.mdirx/2);
-		pair <GLfloat, GLfloat> pprev (p.mpositionx, p.mpositionz);
-		pair <GLfloat, GLfloat> pnext (tempx, tempz);
-		pair <GLfloat, GLfloat> temp = r.detect_collision(pprev, pnext);
-		p.mpositionx = temp.first;
-		p.mpositionz = temp.second;
+		GLfloat tempx = p.mpositionx - (p.mdirz/2) * weight;
+		GLfloat tempz = p.mpositionz + (p.mdirx/2) * weight;
+		p.mpositionx = tempx;
+		p.mpositionz = tempz;
 		}
 		else{
 
-			GLfloat tempx = p.mpositionx - (p.mdirz);
-		GLfloat tempz = p.mpositionz + (p.mdirx);
-		pair <GLfloat, GLfloat> pprev (p.mpositionx, p.mpositionz);
-		pair <GLfloat, GLfloat> pnext (tempx, tempz);
-		pair <GLfloat, GLfloat> temp = r.detect_collision(pprev, pnext);
-		p.mpositionx = temp.first;
-		p.mpositionz = temp.second;
+		GLfloat tempx = p.mpositionx - (p.mdirz) * weight;
+		GLfloat tempz = p.mpositionz + (p.mdirx) * weight;
+		p.mpositionx = tempx;
+		p.mpositionz = tempz;
 		}
 	}
 
@@ -573,6 +516,7 @@ int main(int argc, char** argv) {
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowSize(800, 600);
 	glutCreateWindow("FPS");
+	PlaySound(L"darkbackground.wav", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP);
 	//glutFullScreen();
 	initRendering();
 

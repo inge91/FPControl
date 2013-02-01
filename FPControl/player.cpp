@@ -5,6 +5,8 @@ Player::Player()
 {
 	mpositionx = 0;
 	mpositionz = 0;
+	mprevx = mpositionx;
+	mprevz = mpositionz;
 	mdegrees = 0 ;
 
 	// set value of dirz and mdirx
@@ -13,6 +15,9 @@ Player::Player()
 
 GLfloat prevx = 0;
 GLfloat prevz = 0;
+GLfloat y = -12;
+bool up = false;
+bool first = true;
 
 void Player::draw_player()
 {
@@ -20,17 +25,71 @@ void Player::draw_player()
 	// Rotate the camera towards right angle
 	glRotatef(mdegrees, 0, 1, 0);
 
-	if(prevx != mpositionx || prevz != mpositionz && 0)
+	if(prevx != mpositionx || prevz != mpositionz )
 	{
 
-		cout<<"("<<mpositionx<<","<<mpositionz<<")"<<endl;
+		//cout<<"("<<-mpositionx<<","<<-mpositionz<<")"<<endl;
 		prevx = mpositionx;
 		prevz = mpositionz;
 
+		/*
+		if(first)
+		{
+
+			PlaySound(L"walk1.wav", NULL, SND_ASYNC|SND_FILENAME);
+			first = false;
+		}
+		else{
+			PlaySound(L"walk2.wav", NULL, SND_ASYNC|SND_FILENAME);
+			first = true;
+
+		}*/
+
+		if(y <= -12)
+		{
+			y += 0.1;
+			up = false;
+
+		}
+		else if(y >= -11)
+		{
+
+
+			if(first)
+			{
+				PlaySound(L"walk1.wav", NULL, SND_ASYNC|SND_FILENAME);
+				first = false;
+			}
+			else{				PlaySound(L"walk2.wav", NULL, SND_ASYNC|SND_FILENAME);
+				first = true;
+
+			}
+			y -= 0.1;
+			up = true;
+
+
+		}
+		if(up)
+		{
+			y -= 0.1;
+		}
+		else{
+			y+=0.1;
+		}
 
 	}
+	else{
+		if(y >= -12)
+		{
+			y-= 0.1;
+		}
+	}
+
+	std::cout<<y<<endl;
 	// Translate camera to right position
-	glTranslatef(mpositionx, 0, mpositionz);
+	glTranslatef(mpositionx, y, mpositionz );
+	mprevx = mpositionx;
+	mprevz = mpositionz;
 	
 	glColor3f(1,0, 1);
 	glBegin(GL_QUADS);

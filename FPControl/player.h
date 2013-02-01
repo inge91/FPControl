@@ -5,7 +5,8 @@
 
 #include <GL/glut.h>
 #include <iostream>
-
+#include <windows.h> 
+#include <mmsystem.h>
 using namespace std;
 class Player{
 
@@ -15,6 +16,8 @@ public:
 	// Postion of the player
 	GLfloat mpositionx;
 	GLfloat mpositionz; 
+	GLfloat mprevx;
+	GLfloat mprevz;
 	GLfloat mdegrees;
 	GLfloat mdirx;
 	GLfloat mdirz;
