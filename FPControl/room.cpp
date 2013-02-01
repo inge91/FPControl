@@ -316,10 +316,10 @@ pair <GLfloat, GLfloat> Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<
 					{
 						if(abs(abs(-nextz) - abs(z1)) <  abs(abs(-nextz) - abs(z2)))
 						{
-							next.second = prevz ;
+							next.second = prevz+0.2 ;
 						}
 						else{
-							next.second = prevz ;
+							next.second = prevz-0.2 ;
 						}
 					}
 					
@@ -337,10 +337,10 @@ pair <GLfloat, GLfloat> Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<
 						
 						if(abs(abs(-nextz) - abs(z1)) <  abs(abs(-nextz) - abs(z2)))
 							{
-								next.second = prevz ;
+								next.second = prevz +0.2 ;
 							}
 							else{
-								next.second = prevz ;
+								next.second = prevz - 0.2 ;
 							}
 
 					}
@@ -370,10 +370,10 @@ pair <GLfloat, GLfloat> Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<
 					{
 						if(abs(abs(-nextx) - abs(x1)) <  abs(abs(-nextx) - abs(x2)))
 						{
-							next.first = prevx ;
+							next.first = prevx +0.2;
 						}
 						else{
-							next.first = prevx ;
+							next.first = prevx -0.2;
 						}
 					}
 				}
@@ -391,10 +391,10 @@ pair <GLfloat, GLfloat> Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<
 					{
 						if(abs(abs(-nextx) - abs(x1)) <  abs(abs(-nextx) - abs(x2)))
 						{
-							next.second = prevx ;
+							next.second = prevx +0.2;
 						}
 						else{
-							next.second = prevx ;
+							next.second = prevx -0.2;
 						}
 					}
 
