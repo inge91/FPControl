@@ -4,6 +4,7 @@
 Player::Player()
 {
 	mpositionx = 0;
+	mpositiony = -12;
 	mpositionz = 0;
 	mprevx = mpositionx;
 	mprevz = mpositionz;
@@ -15,7 +16,6 @@ Player::Player()
 
 GLfloat prevx = 0;
 GLfloat prevz = 0;
-GLfloat y = -12;
 bool up = false;
 bool first = true;
 
@@ -45,13 +45,13 @@ void Player::draw_player()
 
 		}*/
 
-		if(y <= -12)
+		if(mpositiony <= -14)
 		{
-			y += 0.1;
+			mpositiony += 0.15;
 			up = false;
 
 		}
-		else if(y >= -11)
+		else if(mpositiony >= -12)
 		{
 
 
@@ -64,30 +64,29 @@ void Player::draw_player()
 				first = true;
 
 			}
-			y -= 0.1;
+			mpositiony -= 0.15;
 			up = true;
 
 
 		}
 		if(up)
 		{
-			y -= 0.1;
+			mpositiony -= 0.15;
 		}
 		else{
-			y+=0.1;
+			mpositiony +=0.15;
 		}
 
 	}
 	else{
-		if(y >= -12)
+		if(mpositiony >= -14)
 		{
-			y-= 0.1;
+			mpositiony -= 0.15;
 		}
 	}
 
-	std::cout<<y<<endl;
 	// Translate camera to right position
-	glTranslatef(mpositionx, y, mpositionz );
+	glTranslatef(mpositionx, mpositiony, mpositionz );
 	mprevx = mpositionx;
 	mprevz = mpositionz;
 	

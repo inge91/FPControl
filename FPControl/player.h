@@ -15,6 +15,7 @@ public:
 
 	// Postion of the player
 	GLfloat mpositionx;
+	GLfloat mpositiony; 
 	GLfloat mpositionz; 
 	GLfloat mprevx;
 	GLfloat mprevz;

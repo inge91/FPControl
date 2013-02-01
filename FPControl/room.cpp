@@ -4,7 +4,7 @@
 Room::Room(Player *p)
 {
 	mp = p;
-    maxy = 50;
+    maxy = 20;
     miny = -20;
     minx = -150;
     maxx = 150;
@@ -66,16 +66,31 @@ void Room::draw_roof()
     glBindTexture(GL_TEXTURE_2D, mroof);
 	glBegin(GL_QUADS);
 	glTexCoord2f(0, 0);
-	glVertex3f(minx, maxy + 30, minz);
-	glTexCoord2f(2, 0);
-	glVertex3f(maxx, maxy + 30, minz);
-	glTexCoord2f(2, 2);
-	glVertex3f(maxx, maxy + 30, maxz);
-	glTexCoord2f(0, 2);
-	glVertex3f(minx, maxy + 30, maxz);
+	glVertex3f(minx - mp->mpositionx, maxy - mp->mpositiony , minz - mp->mpositionz);
+	glTexCoord2f(3, 0);
+	glVertex3f(maxx - mp->mpositionx, maxy - mp->mpositiony, minz - mp->mpositionz);
+	glTexCoord2f(3, 3);
+	glVertex3f(maxx - mp->mpositionx, maxy - mp->mpositiony , maxz - mp->mpositionz);
+	glTexCoord2f(0, 3);
+	glVertex3f(minx - mp->mpositionx, maxy - mp->mpositiony, maxz - mp->mpositionz);
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
-
+	
+	/*
+	glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, mroof);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0, 0);
+	glVertex3f(minx , maxy , minz );
+	glTexCoord2f(2, 0);
+	glVertex3f(maxx , maxy , minz );
+	glTexCoord2f(2, 2);
+	glVertex3f(maxx , maxy , maxz );
+	glTexCoord2f(0, 2);
+	glVertex3f(minx , maxy , maxz );
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+	*/
 
 }
 
@@ -103,7 +118,7 @@ void Room::set_textures()
 {
 
 	//mtile = GetTexture("tile3.jpg");
-	mtile = GetTexture("grass_tile3.png");
+	mtile = GetTexture("grass_tile4.png");
 	mwall = GetTexture("brick_wall2.jpg");
 	//mroof = GetTexture("roof.jpg");
 	mroof = GetTexture("stars.jpg");
