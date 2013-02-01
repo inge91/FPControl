@@ -516,7 +516,7 @@ int main(int argc, char** argv) {
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowSize(800, 600);
 	glutCreateWindow("FPS");
-	PlaySound(L"darkbackground.wav", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP);
+	PlaySound(L"darkbackground.wav", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP|SND_NOSTOP);
 	//glutFullScreen();
 	initRendering();
 

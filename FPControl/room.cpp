@@ -4,7 +4,7 @@
 Room::Room(Player *p)
 {
 	mp = p;
-    maxy = 20;
+    maxy = 40;
     miny = -20;
     minx = -150;
     maxx = 150;
