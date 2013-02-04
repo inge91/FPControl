@@ -29,6 +29,10 @@ private:
 	void draw_walls();
 	void draw_roof();
 	void load_coords();
+	void set_walls();
+	void set_start();
+	void set_end();
+	void set_player_position(GLfloat x, GLfloat z);
 	
 	// Textures
 	GLuint mtile;
@@ -41,6 +45,8 @@ private:
 	GLfloat maxx;
 	GLfloat minz;
 	GLfloat maxz;
+	GLfloat beginx;
+	GLfloat beginz;
 	string mlevelno;
 	Player *mp;
 

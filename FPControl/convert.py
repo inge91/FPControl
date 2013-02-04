@@ -1,4 +1,5 @@
 import imageconverter
+import set_positions
 
 def main():
 	i = 1
@@ -10,6 +11,13 @@ def main():
 			with open(filename) as f: 
 				f.close()
 				imageconverter.convert(filename)
+		except IOError as e:
+			break
+		
+		try:
+			with open(filename) as f: 
+				f.close()
+				set_positions.set_positions(filename)
 		except IOError as e:
 			break
 		

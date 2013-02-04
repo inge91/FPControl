@@ -1,14 +1,23 @@
 import imageconverter
+import set_positions
 
 def main():
 	i = 1
 	while(True):
 		filename = "level" + str(i) +".png"
+		print filename
 		
 		try:
 			with open(filename) as f: 
 				f.close()
 				imageconverter.convert(filename)
+		except IOError as e:
+			break
+		
+		try:
+			with open(filename) as f: 
+				f.close()
+				setup_positions.set_positions(filename)
 		except IOError as e:
 			break
 		

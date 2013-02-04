@@ -3,9 +3,9 @@
 
 Player::Player()
 {
-	mpositionx = -500;
+	mpositionx = 0;
 	mpositiony = -12;
-	mpositionz = -500;
+	mpositionz = 0;
 	mprevx = mpositionx;
 	mprevz = mpositionz;
 	mdegrees = 0 ;

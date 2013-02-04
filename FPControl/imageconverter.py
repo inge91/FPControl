@@ -31,9 +31,9 @@ def convert(filename):
 			if l.mode == "RGB":
 				(r,g,b) = l.getpixel((j,i))
 			else:
-				(r, _, _, _) = l.getpixel((j,i))
+				(r, g, b, _) = l.getpixel((j,i))
 			# In case of non-black pixel
-			if r > 0:
+			if r > 0 or g > 0 or b > 0:
 				filed.write("1 ")
 			# In case of black pixel
 			else:

@@ -10,7 +10,7 @@ Room::Room(Player *p)
     maxx = 150;
     minz = -150;
     maxz = 150;
-	mlevelno ="12";
+	mlevelno ="16";
 	update_level();
 }
 
@@ -159,9 +159,12 @@ void Room::set_textures()
 	mroof = GetTexture("stars.jpg");
 }
 
-void Room::update_level()
+
+// Fill mcoordinates with the coords from file level[]coords.txt
+void Room::set_walls()
 {
-	// Clear the coordinate vector
+
+// Clear the coordinate vector
 	mcoordinates.clear();
 
 	string leveltxt = string("level") +  string(mlevelno) + string("coords.txt");
@@ -252,7 +255,8 @@ void Room::update_level()
 		pair <GLfloat, GLfloat> p1 (a,b);
 		pair <GLfloat, GLfloat> p2 (c,d);
 		pair <pair<GLfloat, GLfloat>, pair<GLfloat, GLfloat>>  p3 (p1, p2);
-		mcoordinates.push_back(p3);
+		mcoordinates.push_back(p3);	
+		std::cout<<"wall: "<<a<< ", " <<b<< endl;
 	}
 	
 	// Done with the file
@@ -260,6 +264,117 @@ void Room::update_level()
 
 }
 
+}
+
+
+void Room::set_start()
+{
+	string leveltxt = string("level") +  string(mlevelno) + string("start.txt");
+	ifstream myfile (leveltxt);
+
+	if( myfile == NULL)
+	{
+		std::cout<<"Couldn't find the file"<<endl;
+
+	}
+	else{
+
+	string line;
+	getline(myfile, line);
+	
+	// Done with the file
+	myfile.close();
+		GLfloat a = -1;
+		GLfloat b = -1; 
+		string temp;
+
+		for(int i = 0; i < line.length(); i++)
+		{
+			if(line[i]== ' ' || line[i] == ',')
+			{
+				if(temp.length() > 0)
+				{
+					// Fill the next number
+					if(a == -1)
+					{
+						a = atoi(temp.c_str());
+						std::cout<<"found number " << a<<endl;
+					}
+					else if (b == -1)
+					{
+						b = atoi(temp.c_str());
+						std::cout<<"found number " << b<<endl;
+					}
+					else
+					{
+						std::cout<<"Too many numbers for start"<<endl;
+					}
+
+					// Reset temp
+					temp = "";
+				}
+			}
+			else{
+				temp += line[i];
+				std::cout<<"temp is now "<<temp<<endl;
+			}
+
+		}
+
+		// Fill the next number
+		if(a == -1)
+		{
+			a = atoi(temp.c_str());
+		}
+		else if (b == -1)
+		{
+			b = atoi(temp.c_str());
+		}
+		else
+		{
+			std::cout<<"Too many numbers for start"<<endl;
+		}
+		if(a == -1 || b == -1)
+		{
+			beginx = NULL;
+			beginz = NULL;
+		}
+		else{
+
+			// Make the right size conversion
+			beginx = (a - 15) * 10;
+			beginz = (b - 15) * 10;
+			std::cout<<"(beginx, beginy) =("<<beginx<<","<<beginz<<")"<<"endl";
+		}
+	}
+
+
+}
+
+
+
+void Room::set_end()
+{
+}
+
+void Room::set_player_position(GLfloat x, GLfloat z)
+{
+	mp->mpositionx = x;
+	mp->mpositionz = z;
+}
+
+
+void Room::update_level()
+{
+	set_walls();
+	set_start();
+	if(beginx != NULL && beginz != NULL)
+	{
+		std::cout<<"set player positon\n";
+		std::cout<<beginx<<beginz<<endl;
+		set_player_position(-beginx, -beginz);
+	}
+	set_end();
 }
 
 pair <GLfloat, GLfloat> Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<GLfloat, GLfloat>next)
