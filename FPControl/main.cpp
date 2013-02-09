@@ -19,6 +19,7 @@ Player p = Player();
 Room r = Room(&p);
 FMOD::System     *sys; //handle to FMOD engine
 FMOD::Sound      *sound1; //sound that will be loaded and played
+FMOD::Channel *c1;			// channel of choice for sound
 
 
 void key_down_func(unsigned char key, int x, int y) {
@@ -205,60 +206,18 @@ void drawScene() {
 	pair <GLfloat, GLfloat> temp = r.detect_collision(pprev, pnext);
 	p.mpositionx = temp.first;
 	p.mpositionz = temp.second;
+	pair <GLfloat, GLfloat> current (p.mpositionx, p.mpositionz);
+	if(r.at_goal(current))
+	{
+		exit(0);
+	}
 
 	p.draw_player();
-
 
 	r.draw_level();
 
 	sys->update();
-	/*
-	GLfloat maxy = 50;
-	GLfloat miny = -20;
-	GLfloat minx = -150;
-	GLfloat maxx = 150;
-	GLfloat minz = -150;
-	GLfloat maxz = 150;
-	GLfloat lengthx = std::abs(minx) +maxx;
-	GLfloat lengthy = std::abs(miny) +maxy;
 	
-	glColor4f(1, 0,0, 0);
-	glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, t);
-	glBegin(GL_QUADS);
-	glVertex3f(minx,miny, minz);
-	glVertex3f(minx,maxy, minz);
-	glVertex3f(minx,maxy, maxz);
-	glVertex3f(minx,miny, maxz);
-	glEnd();
-	glDisable(GL_TEXTURE_2D);
-	
-	
-	glEnable(GL_TEXTURE_2D);
-	glColor3f(0, 1, 0);
-	glBegin(GL_QUADS);
-	glVertex3f(minx, maxy, minz);
-	glVertex3f(maxx, maxy, minz);
-	glVertex3f(maxx, maxy, maxz);
-	glVertex3f(minx, maxy, maxz);
-
-
-	glEnable(GL_TEXTURE_2D);
-	glColor4f(1,1,1, 0);
-    glBindTexture(GL_TEXTURE_2D, t);
-	glTexCoord2f(0, 0);
-	glVertex3f(minx, miny, minz);
-	glVertex3f(maxx, miny, minz);
-	glVertex3f(maxx, miny, maxz);
-	glTexCoord2f(1, 1);
-	glVertex3f(minx, miny, maxz);
-	glEnd();
-	glDisable(GL_TEXTURE_2D);
-	*/
-	//glMatrixMode( GL_MODELVIEW);
-	//glLoadIdentity();
-	//l.draw_alien(p.mpositionx, p.mpositionz);
-
 
 	glutSwapBuffers();
 }
@@ -306,16 +265,7 @@ GLuint LoadTextureRAW( const char * filename, int wrap, int w, int h )
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
                      wrap ? GL_REPEAT : GL_CLAMP );
 
-	/*
-	glTexImage2D(GL_TEXTURE_2D, 0, 
-		GL_RGBA,
-		width,
-		height, 
-		0, 
-		GL_RGBA,
-		GL_UNSIGNED_BYTE,
-		data);
-		*/
+	
     // build our texture mipmaps
     gluBuild2DMipmaps( GL_TEXTURE_2D, 3, width, height,
                        GL_RGB, GL_UNSIGNED_BYTE, data );
@@ -521,10 +471,13 @@ void init_sound_engine()
 
 
 	//load sounds
-	sys->createSound("night.mp3", FMOD_HARDWARE, 0, &sound1);
-										/* so turn it off here.  We could have also just put FMOD_LOOP_OFF in the above CreateSound call. */
+	sys->createSound("night.mp3", FMOD_HARDWARE|FMOD_LOOP_NORMAL, 0, &sound1);
+
+	sys->playSound(FMOD_CHANNEL_FREE, sound1, true, &c1);
+	c1->setVolume(1);
+	c1->setPaused(false);
+
    
-	sound1->setLoopCount(100);
 	
     glEnable(GL_DEPTH_TEST); // check for depth
     
@@ -557,7 +510,7 @@ glutGameModeGet(GLUT_GAME_MODE_POSSIBLE);
 
 	init_sound_engine();
 
-	sys->playSound(FMOD_CHANNEL_FREE, sound1, false, 0);
+	//sys->playSound(FMOD_CHANNEL_FREE, sound1, false, 0);
 	//glutFullScreen();
 	initRendering();
 

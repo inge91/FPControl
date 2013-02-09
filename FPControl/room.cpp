@@ -112,21 +112,7 @@ void Room::draw_roof()
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
 	
-	/*
-	glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, mroof);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0, 0);
-	glVertex3f(minx , maxy , minz );
-	glTexCoord2f(2, 0);
-	glVertex3f(maxx , maxy , minz );
-	glTexCoord2f(2, 2);
-	glVertex3f(maxx , maxy , maxz );
-	glTexCoord2f(0, 2);
-	glVertex3f(minx , maxy , maxz );
-	glEnd();
-	glDisable(GL_TEXTURE_2D);
-	*/
+
 
 }
 
@@ -160,6 +146,95 @@ void Room::set_textures()
 	mroof = GetTexture("stars.jpg");
 }
 
+void Room::set_end()
+{
+	std::cout<<"putting in the end position"<<endl;
+string leveltxt = string("level") +  string(mlevelno) + string("end.txt");
+	ifstream myfile (leveltxt);
+
+	if( myfile == NULL)
+	{
+		std::cout<<"Couldn't find the file"<<endl;
+
+	}
+	else{
+
+	string line;
+	while(getline(myfile, line))
+		{
+
+		GLfloat a = -1;
+		GLfloat b = -1; 
+		string temp;
+
+		
+		for(int i = 0; i < line.length(); i++)
+		{
+			if(line[i]== ' ' || line[i] == ',')
+			{
+				if(temp.length() > 0)
+				{
+					// Fill the next number
+					if(a == -1)
+					{
+						a = atoi(temp.c_str());
+					}
+					else if (b == -1)
+					{
+						b = atoi(temp.c_str());
+					}
+					else
+					{
+						std::cout<<"Too many numbers for start"<<endl;
+					}
+
+					// Reset temp
+					temp = "";
+				}
+			}
+			else{
+				temp += line[i];
+			}
+
+		}
+
+		// Fill the next number
+		if(a == -1)
+		{
+			a = atoi(temp.c_str());
+		}
+		else if (b == -1)
+		{
+			b = atoi(temp.c_str());
+		}
+		else
+		{
+			std::cout<<"Too many numbers for start"<<endl;
+		}
+		if(a == -1 || b == -1)
+		{
+			std::cout<<"too few numbers to start"<<endl;
+		}
+		else{
+
+			// create a tile like structure
+			GLfloat tempa = a;
+			GLfloat tempb = b;
+			a = ((a - 15) * 10) - 5;
+			b = ((b - 15) * 10) - 5;
+			int c = ((tempa - 15) * 10) + 5;
+			int d = ((tempb - 15) * 10) + 5;
+			pair <GLfloat, GLfloat> p1 (a,b);
+			pair <GLfloat, GLfloat> p2 (c,d);
+			pair <pair<GLfloat, GLfloat>, pair<GLfloat, GLfloat>>  p3 (p1, p2);
+			mendpositions.push_back(p3);	
+			std::cout<<"tile: "<<a<< ", " <<b<< " "<< c<< ","<< d <<endl;
+		}
+	}
+	}
+	// Done with the file
+	myfile.close();
+}
 
 // Fill mcoordinates with the coords from file level[]coords.txt
 void Room::set_walls()
@@ -257,7 +332,6 @@ void Room::set_walls()
 		pair <GLfloat, GLfloat> p2 (c,d);
 		pair <pair<GLfloat, GLfloat>, pair<GLfloat, GLfloat>>  p3 (p1, p2);
 		mcoordinates.push_back(p3);	
-		std::cout<<"wall: "<<a<< ", " <<b<< endl;
 	}
 	
 	// Done with the file
@@ -299,12 +373,10 @@ void Room::set_start()
 					if(a == -1)
 					{
 						a = atoi(temp.c_str());
-						std::cout<<"found number " << a<<endl;
 					}
 					else if (b == -1)
 					{
 						b = atoi(temp.c_str());
-						std::cout<<"found number " << b<<endl;
 					}
 					else
 					{
@@ -317,7 +389,6 @@ void Room::set_start()
 			}
 			else{
 				temp += line[i];
-				std::cout<<"temp is now "<<temp<<endl;
 			}
 
 		}
@@ -345,7 +416,6 @@ void Room::set_start()
 			// Make the right size conversion
 			beginx = (a - 15) * 10;
 			beginz = (b - 15) * 10;
-			std::cout<<"(beginx, beginy) =("<<beginx<<","<<beginz<<")"<<"endl";
 		}
 	}
 
@@ -354,9 +424,7 @@ void Room::set_start()
 
 
 
-void Room::set_end()
-{
-}
+
 
 void Room::set_player_position(GLfloat x, GLfloat z)
 {
@@ -390,15 +458,6 @@ pair <GLfloat, GLfloat> Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<
 	GLfloat prevz = prev.second;
 	GLfloat nextx = next.first;
 	GLfloat nextz = next.second;
-	
-	if(prevx!= nextx || prevz!= nextz )
-	{
-	//	std::cout<<"\n"<<endl;
-	//	std::cout<<"-nextx"<<endl;
-	//	std::cout<<-nextx<<endl;
-	//	std::cout<<"-nextz"<<endl;
-	//	std::cout<<-nextz<<endl;
-	}
 
 	pair <pair<GLfloat, GLfloat>, pair<GLfloat, GLfloat>>  p;
 	for (unsigned i=0; i<mcoordinates.size(); i++)
@@ -409,11 +468,6 @@ pair <GLfloat, GLfloat> Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<
 		x2 = p.second.first;
 		z2 = p.second.second;
 
-	if(prevx!= nextx || prevz!= nextz)
-	{
-		//std::cout<<"walls"<<endl;
-	//	std::cout<<x1<< ","<<z1<< " " <<x2<<","<<z2<<endl;
-	}
 		// Horizontal wall
 		if (z1 == z2)
 		{
@@ -476,12 +530,6 @@ pair <GLfloat, GLfloat> Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<
 					x1 = x1 - 4;
 					x2 = x2 + 4;
 
-					if(prevx!= nextx || prevz!= nextz && 0)
-					{
-						//std::cout<<"new x1 x2"<<endl;
-						//std::cout<<x1<< ","<<x2<<endl;
-					}
-					
 					if(-nextx >x1 && -nextx < x2 )
 					{
 						if(abs(abs(-nextx) - abs(x1)) <  abs(abs(-nextx) - abs(x2)))
@@ -523,5 +571,53 @@ pair <GLfloat, GLfloat> Room::detect_collision(pair<GLfloat, GLfloat>prev, pair<
 		
 	}
 	return next;
+
+}
+
+GLfloat prevvx = 0;
+GLfloat prevvz = 0;
+bool Room::at_goal(pair<GLfloat, GLfloat> pos)
+{
+		GLfloat x1;
+		GLfloat z1;
+		GLfloat x2;
+		GLfloat z2;
+
+		GLfloat posx = -pos.first;
+		GLfloat posz = -pos.second;
+		if(posx != prevvx || posz != prevvz)
+		{
+			std::cout<<"position player"<<endl;
+			std::cout<<posx<<", "<<posz<<endl;
+
+		}
+		
+
+		pair <pair<GLfloat, GLfloat>, pair<GLfloat, GLfloat>>  p;
+		for (unsigned i=0; i<mendpositions.size(); i++)
+		{
+			p = mendpositions.at(i);
+			x1 = p.first.first;
+			z1 = p.first.second;
+			x2 = p.second.first;
+			z2 = p.second.second;
+		if(posx != prevvx || posz != prevvz)
+		{
+			std::cout<<"position tile"<<endl;
+			std::cout<<x1<<", "<<z1 << " "<< x2 << ", " <<z2<<endl;
+
+		}			
+			if(posx > x1 && posz > z1  && posx < x2 && posz < z2)
+			{
+				prevvx = posx;
+				prevvz = posz;
+				return true;
+			}
+
+		}
+				prevvx = posx;
+				prevvz = posz;
+
+		return false;
 
 }

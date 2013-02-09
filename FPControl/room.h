@@ -21,7 +21,15 @@ public:
 	vector<pair<pair<GLfloat, GLfloat>, pair<GLfloat, GLfloat>>> mcoordinates;
 	void draw_level();
 	void set_textures();
+
+	// Coordinates of the end position(s)
+	vector<pair<pair<GLfloat, GLfloat>, pair<GLfloat, GLfloat>>> mendpositions;
+
+
+	// Function that detect collision between walls
 	pair<GLfloat, GLfloat> detect_collision(pair<GLfloat, GLfloat>prev, pair<GLfloat, GLfloat>next);
+	// Detects if at end positions
+    bool at_goal(pair<GLfloat, GLfloat>pos);
 
 private:
 	void update_level();
