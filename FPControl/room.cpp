@@ -27,6 +27,7 @@ void Room::draw_level()
 // Draw the walls
 void Room::draw_walls()
 {
+	glDisable(GL_LIGHTING);
 	
 	GLfloat x1;
 	GLfloat y1;
