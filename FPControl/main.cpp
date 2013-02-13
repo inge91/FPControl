@@ -19,7 +19,9 @@ Player p = Player();
 Room r = Room(&p);
 FMOD::System     *sys; //handle to FMOD engine
 FMOD::Sound      *sound1; //sound that will be loaded and played
+FMOD::Sound      *sound2; //sound that will be loaded and played
 FMOD::Channel *c1;			// channel of choice for sound
+FMOD::Channel *c2;			// channel of choice for sound
 
 
 void key_down_func(unsigned char key, int x, int y) {
@@ -189,6 +191,7 @@ GLuint t;
 //GLuint alien;
 GLfloat prevdegr = 0;
 Alien l= Alien(p.mpositionx, p.mpositionz);
+
 void drawScene() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
@@ -477,7 +480,9 @@ void init_sound_engine()
 	c1->setVolume(1);
 	c1->setPaused(false);
 
-   
+	
+	
+
 	
     glEnable(GL_DEPTH_TEST); // check for depth
     

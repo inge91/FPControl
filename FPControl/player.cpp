@@ -47,22 +47,8 @@ void Player::draw_player()
 	if(prevx != mpositionx || prevz != mpositionz )
 	{
 
-		//cout<<"("<<-mpositionx<<","<<-mpositionz<<")"<<endl;
 		prevx = mpositionx;
 		prevz = mpositionz;
-
-		/*
-		if(first)
-		{
-
-			PlaySound(L"walk1.wav", NULL, SND_ASYNC|SND_FILENAME);
-			first = false;
-		}
-		else{
-			PlaySound(L"walk2.wav", NULL, SND_ASYNC|SND_FILENAME);
-			first = true;
-
-		}*/
 
 		if(mpositiony <= -14)
 		{
@@ -79,8 +65,7 @@ void Player::draw_player()
 				msys->playSound(FMOD_CHANNEL_FREE, mwalk1, false, 0);
 				first = false;
 			}
-			else{				//msys->playSound(FMOD_CHANNEL_FREE, mwalk2, false, 0);
-				first = true;
+			else{				first = true;
 
 			}
 			mpositiony -= 0.15;

@@ -58,5 +58,10 @@ private:
 	string mlevelno;
 	Player *mp;
 
+	FMOD::System     *msys; //handle to FMOD engine
+	FMOD::Sound      *mend; //sound that will be loaded and played
+	FMOD::Channel	 *mc2;
+	void set_sound();
+
 };
 #endif

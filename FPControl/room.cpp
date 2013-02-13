@@ -12,9 +12,25 @@ Room::Room(Player *p)
     maxz = 150;
 	mlevelno ="16";
 	update_level();
+	set_sound();
 }
 
 
+void Room::set_sound()
+{
+//init FMOD
+	FMOD::System_Create(&msys);// create an instance of the game engine
+	msys->init(32, FMOD_INIT_NORMAL, 0);// initialise the game engine with 32 channels
+
+
+	//load sounds
+	msys->createSound("end.mp3", FMOD_HARDWARE|FMOD_LOOP_NORMAL, 0, &mend);
+	msys->playSound(FMOD_CHANNEL_FREE, mend, true, &mc2);
+	mc2->setVolume(0.9);
+	mc2->setPaused(false);
+
+    
+}
 
 // Draw the room
 void Room::draw_level()
@@ -160,7 +176,8 @@ string leveltxt = string("level") +  string(mlevelno) + string("end.txt");
 	else{
 
 	string line;
-	while(getline(myfile, line))
+	
+while(getline(myfile, line))
 		{
 
 		GLfloat a = -1;
@@ -423,9 +440,6 @@ void Room::set_start()
 }
 
 
-
-
-
 void Room::set_player_position(GLfloat x, GLfloat z)
 {
 	mp->mpositionx = x;
@@ -585,12 +599,11 @@ bool Room::at_goal(pair<GLfloat, GLfloat> pos)
 
 		GLfloat posx = -pos.first;
 		GLfloat posz = -pos.second;
-		if(posx != prevvx || posz != prevvz)
-		{
-			std::cout<<"position player"<<endl;
-			std::cout<<posx<<", "<<posz<<endl;
 
-		}
+		// Determine distance to change sound intensity
+		GLfloat distancex = 99999;
+		GLfloat distancez = 99999;
+	
 		
 
 		pair <pair<GLfloat, GLfloat>, pair<GLfloat, GLfloat>>  p;
@@ -601,23 +614,69 @@ bool Room::at_goal(pair<GLfloat, GLfloat> pos)
 			z1 = p.first.second;
 			x2 = p.second.first;
 			z2 = p.second.second;
-		if(posx != prevvx || posz != prevvz)
-		{
-			std::cout<<"position tile"<<endl;
-			std::cout<<x1<<", "<<z1 << " "<< x2 << ", " <<z2<<endl;
-
-		}			
+		
+			// If fits in tile return true
 			if(posx > x1 && posz > z1  && posx < x2 && posz < z2)
 			{
-				prevvx = posx;
-				prevvz = posz;
+			
 				return true;
+			}
+			// Else calculate distance to that tile
+			else{
+
+				if(abs(x1 - posx) < distancex)
+				{
+					distancex = abs(x1 - posx);
+				}
+				if(abs(x2 - posx) < distancex);
+				{
+					distancex = abs(x2 - posx);
+				}
+				if(abs(z1 - posz) < distancez)
+				{
+					distancez = abs(z1 - posz);
+				}
+				if(abs(z2 - posz) < distancez)
+				{
+					distancez = abs(z2 - posz);
+				}
 			}
 
 		}
-				prevvx = posx;
-				prevvz = posz;
 
+		GLfloat final_distance = distancex + distancez;
+		if(final_distance > 500)
+		{
+			mc2->setVolume(0);
+			mc2->setPaused(false);
+
+		}
+		if(final_distance < 500)
+		{
+			mc2->setVolume(0.2);
+			mc2->setPaused(false);
+		}
+		if(final_distance < 250)
+		{
+			mc2->setVolume(0.4);
+			mc2->setPaused(false);
+		}
+		if(final_distance < 150)
+		{
+			mc2->setVolume(0.6);
+			mc2->setPaused(false);
+		}
+		if(final_distance < 100)
+		{
+			mc2->setVolume(0.8);
+			mc2->setPaused(false);
+		}
+		if(final_distance < 50)
+		{
+			mc2->setVolume(1.8);
+			mc2->setPaused(false);
+		}			
+		// Determine the approximate position from the end
 		return false;
 
 }
