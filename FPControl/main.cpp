@@ -17,6 +17,7 @@ GLfloat weight = 1.5;
 
 Player p = Player();
 Room r = Room(&p);
+Signs signs= Signs();
 FMOD::System     *sys; //handle to FMOD engine
 FMOD::Sound      *sound1; //sound that will be loaded and played
 FMOD::Sound      *sound2; //sound that will be loaded and played
@@ -83,8 +84,10 @@ void key_down_func(unsigned char key, int x, int y) {
 		tempz = p.mpositionz + (p.mdirx) * weight;
 		p.mpositionx = tempx;
 		p.mpositionz = tempz;
+		break;
 	
-
+	case 32:
+		signs.add_sign(p.mpositionx, p.mpositionz);
 		break;
 	case 27: //Escape key
 			exit(0);
@@ -192,6 +195,7 @@ GLuint t;
 GLfloat prevdegr = 0;
 Alien l= Alien(p.mpositionx, p.mpositionz);
 
+
 void drawScene() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
@@ -217,7 +221,9 @@ void drawScene() {
 
 	p.draw_player();
 
+
 	r.draw_level();
+	signs.draw_signs(p.mpositionx, p.mpositionz);
 
 	sys->update();
 	
@@ -521,6 +527,7 @@ glutGameModeGet(GLUT_GAME_MODE_POSSIBLE);
 
 	r.set_textures();
 	l.set_texture();
+	signs.set_textures();
 
 	glutDisplayFunc(drawScene);
 	glutKeyboardFunc(key_down_func);

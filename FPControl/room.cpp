@@ -58,8 +58,6 @@ void Room::draw_walls()
 		y1 = p.first.second;
 		x2 = p.second.first;
 		y2 = p.second.second;
-		//std::cout<<"x1,y1 x2,y2"<<endl;
-		//std::cout<<x1 << ","<<y1<<" "<<x2 <<"," <<y2<<endl;
 
 
 	if (x1 == x2)
@@ -94,8 +92,6 @@ void Room::draw_walls()
 			GLfloat size = abs(x2- x1);
 			GLfloat repeat = size/90;
 			
-			//std::cout<< x2<<","<<x1<< endl;
-			//std::cout<< size<<endl;
 			glTexCoord2f(0, 1);
 			glVertex3f(x1,miny, y1);
 			glTexCoord2f(0, 0);
@@ -160,6 +156,11 @@ void Room::set_textures()
 	mwall = GetTexture("brick_wall2.jpg");
 	//mroof = GetTexture("roof.jpg");
 	mroof = GetTexture("stars.jpg");
+}
+
+void Room::set_aliens()
+{
+
 }
 
 void Room::set_end()
@@ -614,6 +615,7 @@ bool Room::at_goal(pair<GLfloat, GLfloat> pos)
 			z1 = p.first.second;
 			x2 = p.second.first;
 			z2 = p.second.second;
+			
 		
 			// If fits in tile return true
 			if(posx > x1 && posz > z1  && posx < x2 && posz < z2)

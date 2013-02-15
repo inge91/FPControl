@@ -16,6 +16,7 @@
 #include "lodepng.h" 
 #include <SOIL.h>
 #include "room.h"
+#include "signs.h"
 #include "fmod.hpp" //fmod c++ header
 #pragma comment( lib, "fmodex_vc.lib" ) // fmod library
 GLuint LoadTextureRAW( const char * filename, int wrap, int w, int h );

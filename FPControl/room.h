@@ -62,6 +62,9 @@ private:
 	FMOD::Sound      *mend; //sound that will be loaded and played
 	FMOD::Channel	 *mc2;
 	void set_sound();
+	
+	// Put the aliens in the maze
+	void set_aliens();
 
 };
 #endif

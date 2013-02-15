@@ -93,7 +93,25 @@ void Player::draw_player()
 	glTranslatef(mpositionx, mpositiony, mpositionz );
 	mprevx = mpositionx;
 	mprevz = mpositionz;
-	
+
+	/*
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	glEnable(GL_COLOR_MATERIAL);
+	glShadeModel(GL_SMOOTH);
+	GLfloat z = 15;
+
+	GLfloat light_position[] = { 0, 0, 10, 0.0f };
+	GLfloat light_ambient[] = {0.0f, 1.0f, 0.0f, 1.0f};
+	GLfloat light_direction[] = { 0 , 0, 10, 1};
+	GLfloat light_angle[] ={20};
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+	glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION,light_direction);
+	glLightfv(GL_LIGHT0,GL_SPOT_CUTOFF,light_angle);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+
+	glColorMaterial(GL_FRONT, GL_AMBIENT);
+	*/
 	glColor3f(1,0, 1);
 	glBegin(GL_QUADS);
 	glVertex3f(-2, -20 ,0);
@@ -101,6 +119,7 @@ void Player::draw_player()
 	glVertex3f(2 ,10,0);
 	glVertex3f(2, -20, 0);
 	glEnd();
+
 	
 }
 

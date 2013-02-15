@@ -20,6 +20,12 @@ def convert(filename):
 			os.remove(filename[:-4] + "coords.txt")
 	except IOError as e:
 		pass
+	try:
+		with open(filename[:-4] +"whitecoords.txt") as f: 
+			f.close()
+			os.remove(filename[:-4] + "whitecoords.txt")
+	except IOError as e:
+		pass
 	# open txt file of the same name
 	filed = open( filename[:-3] + "txt", "a")
 	filee = open( filename[:-4] + "coords.txt", "a")
@@ -102,7 +108,7 @@ def convert(filename):
 					print "value of r2", 
 					print r2
 					# If next element is white there is no wall
-					if r2 > 0 or b2 > 0 or g2 > 0:
+					if r2 > 0 or g2 > 0 or b2 > 0:
 						pass
 					# Else write the begin coordinate down and set true
 					elif r2 == 0 and b2 == 0 and g2 == 0:

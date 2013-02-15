@@ -8,6 +8,7 @@ Alien::Alien( GLfloat camerax, GLfloat cameraz)
 	mspeed = 0.4;
 	// Set the degrees
 	calculate_degrees(camerax, cameraz); 
+	//set_texture();
 
 
 }
@@ -169,5 +170,6 @@ void Alien::move_alien(GLfloat camerax, GLfloat cameraz)
 
 void Alien::set_texture()
 {
-	malien = GetTexture("alien7.tga");
+	std::string a = "alien7.tga";
+	malien = GetTexture(a);
 }

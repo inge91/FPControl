@@ -20,9 +20,16 @@ def convert(filename):
 			os.remove(filename[:-4] + "coords.txt")
 	except IOError as e:
 		pass
+	try:
+		with open(filename[:-4] +"whitecoords.txt") as f: 
+			f.close()
+			os.remove(filename[:-4] + "whitecoords.txt")
+	except IOError as e:
+		pass
 	# open txt file of the same name
 	filed = open( filename[:-3] + "txt", "a")
 	filee = open( filename[:-4] + "coords.txt", "a")
+	filef = open( filename[:-4] + "whitecoords.txt", "a")
 	[x,y] = l.size
 	wall = False
 	# Loop through all the pixels
@@ -35,6 +42,7 @@ def convert(filename):
 			# In case of non-black pixel
 			if r == 255 and g == 255 and b == 255:
 				filed.write("1 ")
+				filef.write(str(j) + "," + str(i) + "\n")
 			# In case of black pixel
 			elif r == 0 and g == 0 and b == 0 :
 				# Find value of next pixel
